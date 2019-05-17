@@ -38,8 +38,13 @@
     </option>
   </component>
   <component name="ProjectFrameBounds" extendedState="6">
+<<<<<<< HEAD
     <option name="x" value="374" />
     <option name="y" value="257" />
+=======
+    <option name="x" value="-1410" />
+    <option name="y" value="15" />
+>>>>>>> 45e8ae28c853252013b2c0f81a9ee77a0a8c7bf4
     <option name="width" value="1388" />
     <option name="height" value="961" />
   </component>
