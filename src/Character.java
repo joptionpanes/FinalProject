@@ -52,6 +52,20 @@ public class Character {
     public void party(){
 
     }
+    public String getInvString(){
+        String inv = "";
+        for (Object[] s : inventory){
+            int i = 0;
+            inv += s[i];
+            ++i;
+            if (i <= inventory.length){
+                inv += "; ";
+            }
+        System.out.println(inv);
+
+        }
+        return inv;
+    }
 
 
 }
