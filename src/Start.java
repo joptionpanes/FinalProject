@@ -28,6 +28,7 @@ public class Start {
                 Save.getGameName(), JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE, null, options, null);
         if (selection == 0){
             Save.saveToFile();
+            Character character = new Character();
         }
         else if (selection == 1){
             Object[] save = Save.loadFromFile();
