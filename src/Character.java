@@ -2,7 +2,7 @@ public class Character {
 
     private int playerClass; //Classes 0-2, 0 = swordsman, 1 = archer, 2 = mage
     private int coins;
-    private Object[][] inventory = new Object[20][2]; //[20 inv slots.] [Name, number]
+    private static Object[][] inventory = new Object[20][2]; //[20 inv slots.] [Name, number]
     private Object[][] armor = new Object[4][2]; //[4 armor slots] [Name, protection]
     //armor names should be structured like: Material (Iron), Piece (Helmet), Armor
     private String[] armorPieces = {"Helmet", "Chestplate", "Leggings", "Boots"}; //4 armor pieces
@@ -22,6 +22,9 @@ public class Character {
 
     public void setPlayerClass(int c){
         playerClass = c;
+        if (c == 0){
+
+        }
     }
     public void setCoins(int c){
         coins = c;
@@ -69,7 +72,7 @@ public class Character {
         return coins;
     }
 
-    public Object[][] getInventory(){
+    public static Object[][] getInventory(){
         return inventory;
     }
     public Object[][] getArmor(){
