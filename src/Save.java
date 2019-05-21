@@ -4,6 +4,7 @@ import java.io.*;
 public class Save {
     private static String gameName = "gameName";
     private static String saveLocation = "C:\\ProgramData\\" + gameName + "\\saves";
+    private static String mapLocation = saveLocation + "\\map";
 
     public static void saveToFile(){
         Object[][][] testSave = {
@@ -57,4 +58,36 @@ public class Save {
     public static String getGameName() {
         return gameName;
     }
+    public static void setMapLocation(){
+        mapLocation = saveLocation + "\\map";
+        System.out.println(mapLocation + " is location for map");
+    }
+    public static String getMapLocation(){
+        return mapLocation;
+    }
+    public static void setMapAtPos(int x, int y, String s){
+        File map = new File(mapLocation + "\\x" + x + "y" + y);
+        try {
+            map.createNewFile();
+        }catch (IOException e){
+            System.out.println("Exception in creating map file:\n" + e);
+        }
+        try { //tries writing to file
+            ObjectOutputStream os = new ObjectOutputStream(new FileOutputStream(map));
+                os.writeObject(s); //insert name of var to write here
+        } catch (IOException e) {
+            JOptionPane.showMessageDialog(null, e, "Exception", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+    public static String getMapAtPos(int x, int y){
+        File map = new File(mapLocation + "\\x" + x + "y" + y);
+        try { //tries reading and returning file as Object[]
+            ObjectInputStream is = new ObjectInputStream(new FileInputStream(map));
+            return (String)is.readObject();
+        } catch (IOException | ClassNotFoundException e) {
+            JOptionPane.showMessageDialog(null, e, "Exception", JOptionPane.ERROR_MESSAGE);
+        }
+        return "NULL";
+    }
+
 }
