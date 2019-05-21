@@ -19,6 +19,11 @@ public class Movement {
     public static void movementMain(){
         //Game Loop
         do {
+
+            
+
+
+
             System.out.println("1.Move up\n2.Move down\n3.Move left\n4.Move right\n5.Inventory\n6.Exit and save");
             if(choice == 1){
                 moveUp();
