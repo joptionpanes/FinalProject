@@ -14,7 +14,7 @@ public class Battle {
                 //don't know how to call inventory
             }
             else {
-
+//                enemy.defendMagic(player);
             }
             if (enemy.isAlive()){
                 player.defend(enemy);

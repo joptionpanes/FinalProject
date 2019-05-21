@@ -65,6 +65,9 @@ public class Enemys {
             JOptionPane.showMessageDialog(null,name + " has been defeated");
         }
     }
+//    public void defendMagic(){
+//
+//    }
     public boolean isAlive(){
         return Hitpoints > 0;
     }
