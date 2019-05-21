@@ -39,6 +39,16 @@ public class Start {
         }
     }
     public static void startGame(Object[][][] save){
-        
+        Character player = new Character();
+        String[] classes = {"Swordsman", "Archer", "Mage"};
+        int classChoice;
+        do {
+            classChoice = JOptionPane.showOptionDialog(null, "Choose your class.\nThey do more damage with their " +
+                        "respective attack methods", "Class selection", JOptionPane.YES_NO_CANCEL_OPTION,
+                JOptionPane.PLAIN_MESSAGE, null, classes, null);
+            player.setPlayerClass(classChoice);
+        }while(classChoice==-1);
+        System.out.println(classChoice + ": " + classes[classChoice]);
+        Movement.movementMain();
     }
 }
