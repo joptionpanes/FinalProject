@@ -7,6 +7,18 @@ public class TestingJOptionPane {
 
         //THIS FILE CAN BE DELETED!
 
+        Movement.movementMain();
+
+
+
+
+
+
+
+
+
+
+        /*
         //Creates a input dialog that asks the user for their name
         String input = JOptionPane.showInputDialog("Enter your name");
         String name = input;
@@ -48,5 +60,9 @@ public class TestingJOptionPane {
                 null, options1, null);
         if (result == JOptionPane.YES_OPTION)
             JOptionPane.showMessageDialog(null, textField.getText());
+
+
+
+            */
     }
 }

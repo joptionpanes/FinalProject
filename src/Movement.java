@@ -1,4 +1,4 @@
-import javax.swing.JOptionPane;
+import javax.swing.*;
 
 public class Movement {
 
@@ -12,45 +12,42 @@ public class Movement {
     private static int max = 10;
     private static int min = movesBeforeEncounter;
     private static int range = max - movesBeforeEncounter + 1;
-    private static int choice;
+    private static int choice = 1;
 
 
     //MOVEMENT MAIN METHOD
     public static void movementMain(){
-        //Game Loop
-        do {
+        //Making The Control Panel for Movement
+        String[] options = new String[] {"Move North", "Move South", "Move East", "Move West", "Inventory", "Exit and Save"};
+        int response = JOptionPane.showOptionDialog(null, "Control Panel", "Movement",
+                JOptionPane.DEFAULT_OPTION, JOptionPane.PLAIN_MESSAGE,
+                null, options, options[0]);
 
-            
+        JPanel panel2 = new JPanel();
+        JTextField textField = new JTextField(10);
+        panel2.add(textField);
 
+        if (response == 0)
+            moveNorth();
+        else if(response == 1)
+            moveSouth();
+        else if(response == 2)
+            moveEast();
+        else if(response == 3)
+            moveWest();
+        else if(response == 4)
+            System.out.println("Your Inventory: :)");
+        else if(response == 5)
+            exitAndSave();
 
-
-            System.out.println("1.Move up\n2.Move down\n3.Move left\n4.Move right\n5.Inventory\n6.Exit and save");
-            if(choice == 1){
-                moveUp();
-            }
-            if(choice == 2){
-                moveDown();
-            }
-            if(choice == 3){
-                moveLeft();
-            }
-            if(choice == 4){
-                moveRight();
-            }
-            if(choice == 5){
-               Character.getInvString();
-            }
-            if(choice == 6){
-                exitAndSave();
-            }
-            location[0] = x;
-            location[0] = y;
-        }while(choice != 0);
+        location[0] = x;
+        location[0] = y;
     }
 
 
     //MOVEMENT METHODS
-    public static void moveUp(){
+    public static void moveNorth(){
+        System.out.println("Moving North");
         y -= 1;
         movesBeforeEncounter();
         moveRand1 = (int)(Math.random() * range) + min;
@@ -60,7 +57,8 @@ public class Movement {
         }
     }
 
-    public static void moveLeft(){
+    public static void moveWest(){
+        System.out.println("Moving West");
         x -= 1;
         movesBeforeEncounter();
         moveRand1 = (int)(Math.random() * range) + min;
@@ -70,7 +68,8 @@ public class Movement {
         }
     }
 
-    public static void moveRight(){
+    public static void moveEast(){
+        System.out.println("Moving East");
         x += 1;
         movesBeforeEncounter();
         moveRand1 = (int)(Math.random() * range) + min;
@@ -80,7 +79,8 @@ public class Movement {
         }
     }
 
-    public static void moveDown(){
+    public static void moveSouth(){
+        System.out.println("Moving South");
         y += 1;
         movesBeforeEncounter();
         moveRand1 = (int)(Math.random() * range) + min;
@@ -104,7 +104,7 @@ public class Movement {
 
     //EXIT AND SAVE METHODS
     public static void exitAndSave(){
-
+        System.out.println("Exited and Saved");
     }
 
 
