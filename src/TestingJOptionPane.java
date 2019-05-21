@@ -34,7 +34,7 @@ public class TestingJOptionPane {
         //Creates modified window
         JOptionPane.showMessageDialog(null,panel, "title",JOptionPane.PLAIN_MESSAGE);
 
-
+        //Adding in custom buttons
         Object[] options1 = { "Try This Number", "Choose A Random Number",
                 "Quit" };
 
@@ -46,8 +46,7 @@ public class TestingJOptionPane {
         int result = JOptionPane.showOptionDialog(null, panel2, "Enter a Number",
                 JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE,
                 null, options1, null);
-        if (result == JOptionPane.YES_OPTION) {
+        if (result == JOptionPane.YES_OPTION)
             JOptionPane.showMessageDialog(null, textField.getText());
-        }
     }
 }
