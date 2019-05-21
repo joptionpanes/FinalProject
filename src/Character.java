@@ -23,8 +23,13 @@ public class Character {
     public void setPlayerClass(int c){
         playerClass = c;
         if (c == 0){
-
-        }
+            addInventory("Basic Shortsword", 5);
+        }else if (c == 1){
+            addInventory("Basic Shortbow", 5);
+        }else if (c == 2){
+            addInventory("Basic Wand", 5);
+        }else
+            System.out.println("Error when selecting class. Does not exist!");
     }
     public void setCoins(int c){
         coins = c;
