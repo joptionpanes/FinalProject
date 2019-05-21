@@ -33,5 +33,21 @@ public class TestingJOptionPane {
         panel.add(text2,BorderLayout.SOUTH);
         //Creates modified window
         JOptionPane.showMessageDialog(null,panel, "title",JOptionPane.PLAIN_MESSAGE);
+
+
+        Object[] options1 = { "Try This Number", "Choose A Random Number",
+                "Quit" };
+
+        JPanel panel2 = new JPanel();
+        panel2.add(new JLabel("Enter number between 0 and 1000"));
+        JTextField textField = new JTextField(10);
+        panel2.add(textField);
+
+        int result = JOptionPane.showOptionDialog(null, panel2, "Enter a Number",
+                JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE,
+                null, options1, null);
+        if (result == JOptionPane.YES_OPTION) {
+            JOptionPane.showMessageDialog(null, textField.getText());
+        }
     }
 }
