@@ -33,7 +33,7 @@ public class Movement {
                 moveRight();
             }
             if(choice == 5){
-               Character.getInvString();
+               //Character.getInvString();
             }
             if(choice == 6){
                 exitAndSave();

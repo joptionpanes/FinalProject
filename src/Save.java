@@ -15,11 +15,8 @@ public class Save {
                         {"Item Name", 10}, {}, {}, {} //armor
                 },
                 {
-                        {10, 11} //x + y current location
+                        {10, 11}, {143}, {1} //current x/y pos, score, class
                 },
-                {
-                        {143} //score
-                }
 
         };
         JFileChooser selectedFile = new JFileChooser(saveLocation); //save dialog opens in saves folder
