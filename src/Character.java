@@ -7,6 +7,7 @@ public class Character {
     private int coins;
     private int dmg; // needs to be set  i don't like your arrays so you do it
     private int hitPoint = 100;
+    private int maxHp = hitPoint;
     private int armorRating; // needs to be set  i don't like your arrays so you do it
     private static Object[][] inventory = new Object[20][2]; //[20 inv slots.] [Name, number]
     private Object[][] armor = new Object[4][2]; //[4 armor slots] [Name, protection]
