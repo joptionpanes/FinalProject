@@ -46,7 +46,7 @@ public class Movement {
         else if(response == 3)
             moveWest();
         else if(response == 4)
-            System.out.println("Your Inventory: :)");
+            Start.player.getInvString();
         else if(response == 5)
             exitAndSave();
 
