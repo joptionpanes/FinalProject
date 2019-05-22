@@ -3,6 +3,7 @@ import javax.swing.*;
 import java.io.*;
 
 public class Start {
+    public static Character player = new Character();
     public static void main(String[] args){
         File saveLocation = new File(Save.getSaveLocation());
         if (saveLocation.exists()){
