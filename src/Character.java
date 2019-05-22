@@ -1,12 +1,19 @@
+import javax.swing.*;
+import java.util.ArrayList;
+
 public class Character {
 
     private int playerClass; //Classes 0-2, 0 = swordsman, 1 = archer, 2 = mage
     private int coins;
+    private int dmg; // needs to be set  i don't like your arrays so you do it
+    private int HitPoints = 100;
+    private int ArmorRating; // needs to be set  i don't like your arrays so you do it
     private static Object[][] inventory = new Object[20][2]; //[20 inv slots.] [Name, number]
     private Object[][] armor = new Object[4][2]; //[4 armor slots] [Name, protection]
     //armor names should be structured like: Material (Iron), Piece (Helmet), Armor
     private String[] armorPieces = {"Helmet", "Chestplate", "Leggings", "Boots"}; //4 armor pieces
     private Object[] defaultEmpty = {"EMPTY", 0};
+
 
     public Character(){ //defaults
         playerClass = 0;
@@ -31,8 +38,8 @@ public class Character {
         }else
             System.out.println("Error when selecting class. Does not exist!");
     }
-    public void setCoins(int c){
-        coins = c;
+    public void addCoins(int c){
+        coins = coins + c;
     }
     public boolean addInventory(String name, int number){
         boolean itemPlaced = false;
@@ -124,7 +131,27 @@ public class Character {
         }
         return arm.toString();
     }
-    public void party(){
-
+    public static ArrayList getEquipables(){
+        ArrayList<Object[]> equipables = new ArrayList<>();
+        for (Object[] i : inventory){
+            if (i[0].equals("Armor")||i[0].equals("Weapon")){
+                equipables.add(i);
+            }
+        }
+        return equipables; //equ[3]
+    }
+    public void defend(Enemys monster){
+        int attackStrength = monster.attack();
+        HitPoints = (HitPoints > (attackStrength - ArmorRating) ) ? HitPoints - (attackStrength-ArmorRating): 0;
+        JOptionPane.showMessageDialog(null, "You did " + (attackStrength-ArmorRating) + " dmg");
+        if(HitPoints <= 0){
+            JOptionPane.showMessageDialog(null,"You died.");
+        }
+    }
+    public int attack(){
+        return dmg;
+    }
+    public boolean isAlive(){
+        return HitPoints > 0;
     }
 }
