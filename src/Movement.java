@@ -2,10 +2,20 @@ import javax.swing.*;
 
 public class Movement {
 
+    /*      !TO DO BEFORE FINiSHED!         *
+    * 1.Add in inventory                    *
+    * 2.Add a way to exit and save          *
+    * 3.Send encounters to the right methods*
+    *                                       *
+    * -Alex Anderson                        *
+    ****************************************/
+
     //VARIABLES
     private static int x = 0;
     private static int y = 0;
     private static int[] location = { x, y };
+    final private static int[] DRAGON_LAIR = {100, 100};
+    private static int moveRand;
     private static int moveRand1;
     private static int moveRand2;
     private static int movesBeforeEncounter = 1;
@@ -92,95 +102,68 @@ public class Movement {
 
 
     //ENCOUNTER METHODS
-    public static void movesBeforeEncounter(){
-        movesBeforeEncounter++;
-    }
+    public static void movesBeforeEncounter(){ movesBeforeEncounter++; }
 
     public static void encounter(){
-        movesBeforeEncounter = 0;
+        movesBeforeEncounter = 0; //chances 20 70 10
+        moveRand = (int)(Math.random() * range) + min;
+        if(moveRand == 1){
+            //wandererEncounter();
+        }
+        else if(moveRand == 2 || moveRand1 == 3){
+            //cityEncounter();
+        }
+        else{
+            //enemyEncounter();
+        }
     }
-
+    public static void caveEncounter(){
+        if (location == DRAGON_LAIR);
+                //dragonsLair();
+    }
 
 
     //EXIT AND SAVE METHODS
-    public static void exitAndSave(){
-        System.out.println("Exited and Saved");
-    }
+    public static void exitAndSave(){ System.out.println("Exited and Saved"); }
 
 
     //SETTER METHODS
-    public static void setX(int x1){
-        x = x1;
-    }
+    public static void setX(int x1){ x = x1; }
 
-    public static void setY(int y1){
-        y = y1;
-    }
+    public static void setY(int y1){ y = y1; }
 
-    public static void setMoveRand1(){
-        moveRand1 = (int)(Math.random() * range) + min;
-    }
+    public static void setMoveRand1(){ moveRand1 = (int)(Math.random() * range) + min; }
 
-    public static void setMoveRand2(){
-        moveRand2 = (int)(Math.random() * range) + min;
-    }
+    public static void setMoveRand2(){ moveRand2 = (int)(Math.random() * range) + min; }
 
-    public static void setMovesBeforeEncounter(int movesBeforeEncounter1){
-        movesBeforeEncounter = movesBeforeEncounter1;
-    }
+    public static void setMovesBeforeEncounter(int movesBeforeEncounter1){ movesBeforeEncounter = movesBeforeEncounter1; }
 
-    public static void setMax(int max1){
-        max = max1;
-    }
+    public static void setMax(int max1){ max = max1; }
 
-    public static void setMin(int min1){
-        min = min1;
-    }
+    public static void setMin(int min1){ min = min1; }
 
-    public static void setChoice(int choice1){
-        choice = choice1;
-    }
+    public static void setChoice(int choice1){ choice = choice1; }
 
 
 
     //GETTER METHODS
-    public static int getX(){
-        return x;
-    }
+    public static int getX(){ return x; }
 
-    public static int getY(){
-        return y;
-    }
+    public static int getY(){ return y; }
 
-    public static int[] getLocation(){
-        return location;
-    }
+    public static int[] getLocation(){ return location; }
 
-    public static int getMoveRand1(){
-        return moveRand1;
-    }
+    public static int getMoveRand1(){ return moveRand1; }
 
-    public static int getMoveRand2(){
-        return moveRand2;
-    }
+    public static int getMoveRand2(){ return moveRand2; }
 
-    public static int getMovesBeforeEncounter(){
-        return movesBeforeEncounter;
-    }
+    public static int getMovesBeforeEncounter(){ return movesBeforeEncounter; }
 
-    public static int getMax(){
-        return max;
-    }
+    public static int getMax(){ return max; }
 
-    public static int getMin(){
-        return min;
-    }
+    public static int getMin(){ return min; }
 
-    public static int getRange(){
-        return range;
-    }
+    public static int getRange(){ return range; }
 
-    public static int getChoice(){
-        return choice;
-    }
+    public static int getChoice(){ return choice; }
 }
