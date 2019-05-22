@@ -1,10 +1,16 @@
 //https://stackoverflow.com/questions/13707223/how-to-write-an-array-to-a-file-java
-import javax.swing.*;
-import java.io.*;
 
 public class Test {
     public static void main(String[] args){
-        Enconters.generateShop();
+        Encounters encounter = new Encounters();
+        int cost = encounter.generateInn();
+        System.out.println(cost);
+//        Object[][] shop = encounter.generateShop();
+//        for (Object[] i : shop){
+//            System.out.print(i[0] + ", ");
+//            System.out.println(i[1]);
+//        }
+
 //        File saveLocation = new File(Save.getSaveLocation());
 //        if (saveLocation.exists()){
 //            System.out.println("Save location already exists!");

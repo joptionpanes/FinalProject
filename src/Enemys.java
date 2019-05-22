@@ -47,7 +47,7 @@ public class Enemys {
         name = "Dragon";
     }
 
-    @Override
+    //@Override
     public String MonName(){
         return name;
     }
@@ -58,9 +58,9 @@ public class Enemys {
         return attack;
     }
     public void defend(Character player){
-        int attackStrength = player.attack();//need the attack option made in Character class plz
-        Hitpoints = (Hitpoints > attackStrength) ? Hitpoints - (attackStrength-armor): 0;
-        JOptionPane.showMessageDialog(null,"You did " + (attackStrength-armor) + "dmg");
+        //int attackStrength = player.attack();//need the attack option made in Character class plz
+        //Hitpoints = (Hitpoints > attackStrength) ? Hitpoints - (attackStrength-armor): 0;
+        //JOptionPane.showMessageDialog(null,"You did " + (attackStrength-armor) + "dmg");
         if(Hitpoints <0){
             JOptionPane.showMessageDialog(null,name + " has been defeated");
         }
