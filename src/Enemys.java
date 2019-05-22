@@ -12,7 +12,7 @@ public class Enemys {
     private int[] MaxHitPointsarray = {(int) (Math.random()*((10-1)+1))+1,(int)(Math.random()*((15-5)+1))+5,(int)
             (Math.random()*((10-8)+1))+8,(int) (Math.random()*((30-20)+1))+20,(int) (Math.random()*((60-40)+1))+40};
 
-    private int[] AttackArray = {(int) (Math.random()*((3-1)+1))+1, (int) (Math.random()*((45-35)+1))+35, (int)
+    private int[] AttackArray = {(int) (Math.random()*((3-1)+1))+1, (int) (Math.random()*((20-10)+1))+10, (int)
             (Math.random()*((30-25)+1))+25,(int) (Math.random()*((50-45)+1))+45, (int) (Math.random()*((50-45)+1))+45};
 
     private int[] ArmorArray = {0,(int)(Math.random()*((3)+1)),(int)(Math.random()*((2)+1)),(int)(Math.random()*
@@ -47,7 +47,6 @@ public class Enemys {
         name = "Dragon";
     }
 
-    //@Override
     public String MonName(){
         return name;
     }
@@ -58,16 +57,15 @@ public class Enemys {
         return attack;
     }
     public void defend(Character player){
-        //int attackStrength = player.attack();//need the attack option made in Character class plz
-        //Hitpoints = (Hitpoints > attackStrength) ? Hitpoints - (attackStrength-armor): 0;
-        //JOptionPane.showMessageDialog(null,"You did " + (attackStrength-armor) + "dmg");
-        if(Hitpoints <0){
+        int attackStrength = player.attack();
+        Hitpoints = (Hitpoints > (attackStrength - armor)) ? Hitpoints - (attackStrength-armor): 0;// checks attack vs dmg and adjusts health
+        JOptionPane.showMessageDialog(null,"You did " + (attackStrength-armor) + " dmg");
+        if(Hitpoints <= 0){
             JOptionPane.showMessageDialog(null,name + " has been defeated");
+            player.addCoins(goldGiven);
         }
     }
-//    public void defendMagic(){
-//
-//    }
+
     public boolean isAlive(){
         return Hitpoints > 0;
     }

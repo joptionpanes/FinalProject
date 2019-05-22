@@ -4,7 +4,6 @@ import java.io.*;
 
 public class Start {
     public static Character player = new Character();
-
     public static void main(String[] args){
         File saveLocation = new File(Save.getSaveLocation());
         if (saveLocation.exists()){
@@ -41,6 +40,7 @@ public class Start {
         }
     }
     public static void startGame(Object[][][] save){
+        Character player = new Character();
         String[] classes = {"Swordsman", "Archer", "Mage"};
         int classChoice;
         do {
