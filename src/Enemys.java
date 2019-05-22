@@ -1,3 +1,5 @@
+import javax.swing.*;
+
 public class Enemys {
     private int maxHitPoints;
     private int Hitpoints;
@@ -27,11 +29,12 @@ public class Enemys {
     public void enemyGenerator() {
         int encounter = (int) (Math.random() * ((5) + 1));
         int maxHitPoints = MaxHitPointsarray[encounter];
-        int attack = AttackArray[encounter];
-        int xpGiven = xpGivenArray[encounter];
-        int goldGiven = goldGivenArray[encounter];
-        int armor = ArmorArray[encounter];
-        String name = names[encounter];
+        Hitpoints = maxHitPoints;
+        attack = AttackArray[encounter];
+        xpGiven = xpGivenArray[encounter];
+        goldGiven = goldGivenArray[encounter];
+        armor = ArmorArray[encounter];
+        name = names[encounter];
     }
 
     public void newDragon(){
@@ -43,4 +46,30 @@ public class Enemys {
         goldGiven = (int)(Math.random()*((60-50))+1)+50;
         name = "Dragon";
     }
+
+    @Override
+    public String MonName(){
+        return name;
+    }
+    public String getStatus(){
+        return "Monster Hp: " + Hitpoints;
+    }
+    public int attack(){
+        return attack;
+    }
+    public void defend(Character player){
+        int attackStrength = player.attack();//need the attack option made in Character class plz
+        Hitpoints = (Hitpoints > attackStrength) ? Hitpoints - (attackStrength-armor): 0;
+        JOptionPane.showMessageDialog(null,"You did " + (attackStrength-armor) + "dmg");
+        if(Hitpoints <0){
+            JOptionPane.showMessageDialog(null,name + " has been defeated");
+        }
+    }
+//    public void defendMagic(){
+//
+//    }
+    public boolean isAlive(){
+        return Hitpoints > 0;
+    }
+
 }
