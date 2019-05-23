@@ -6,8 +6,9 @@ public class Character {
     private int playerClass; //Classes 0-2, 0 = swordsman, 1 = archer, 2 = mage
     private int coins;
     private int dmg; // needs to be set  i don't like your arrays so you do it
-    private int HitPoints = 100;
-    private int ArmorRating; // needs to be set  i don't like your arrays so you do it
+    private int hitPoint = 100;
+    private int maxHp = hitPoint;
+    private int armorRating; // needs to be set  i don't like your arrays so you do it
     private static Object[][] inventory = new Object[20][2]; //[20 inv slots.] [Name, number]
     private Object[][] armor = new Object[4][2]; //[4 armor slots] [Name, protection]
     //armor names should be structured like: Material (Iron), Piece (Helmet), Armor
@@ -142,9 +143,9 @@ public class Character {
     }
     public void defend(Enemys monster){
         int attackStrength = monster.attack();
-        HitPoints = (HitPoints > (attackStrength - ArmorRating) ) ? HitPoints - (attackStrength-ArmorRating): 0;
-        JOptionPane.showMessageDialog(null, "You did " + (attackStrength-ArmorRating) + " dmg");
-        if(HitPoints <= 0){
+        hitPoint = (hitPoint > (attackStrength - armorRating) ) ? hitPoint - (attackStrength- armorRating): 0;
+        JOptionPane.showMessageDialog(null, "You did " + (attackStrength- armorRating) + " dmg");
+        if(hitPoint <= 0){
             JOptionPane.showMessageDialog(null,"You died.");
         }
     }
@@ -152,6 +153,6 @@ public class Character {
         return dmg;
     }
     public boolean isAlive(){
-        return HitPoints > 0;
+        return hitPoint > 0;
     }
 }
