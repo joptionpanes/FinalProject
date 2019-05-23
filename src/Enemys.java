@@ -30,7 +30,7 @@ public class Enemys {
 
     public void enemyGenerator() {
         encounter = (int) (Math.random() * ((5) + 1));
-        int maxHitPoints = maxHitPointsArray[encounter];
+        maxHitPoints = maxHitPointsArray[encounter];
         hitPoints = maxHitPoints;
         attack = attackArray[encounter];
         xpGiven = xpGivenArray[encounter];
