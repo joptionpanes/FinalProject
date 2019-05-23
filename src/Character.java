@@ -62,17 +62,23 @@ public class Character {
         return itemPlaced;
     }
     public Object[] equipArmor(String name, int prot){
-        int i = 0;
+
         Object[] prev = defaultEmpty;
 
-        for (String p : armorPieces){
-            if (name.toLowerCase().contains(p.toLowerCase())){ //checks name of item to put in correct slot
-                prev = armor[i];
+        for (int i = 0; i < armor.length; i++){
+            if (name.contains(armorPieces[i])){ //checks name of item to put in correct slot
+                prev = armor[i]; //
 
                 armor[i][0] = name;
                 armor[i][1] = prot;
+                System.out.println(name + " added to " + armorPieces[i]);
+                System.out.println(getArmorString());
             }
-            i++;
+        }
+
+        for (int a = 0; a < armor.length; a++){
+            armorRating = armorRating + (int)armor[a][1];
+            System.out.println(armorRating);
         }
         return prev; //return the previously worn armor so it isn't deleted and can be put in the inv
     }
@@ -135,18 +141,36 @@ public class Character {
     public static ArrayList getEquipables(){
         ArrayList<Object[]> equipables = new ArrayList<>();
         for (Object[] i : inventory){
-            if (i[0].equals("Armor")||i[0].equals("Weapon")){
+            if (i[0].equals("Armor")||i[0].equals("Catalyst")||i[0].equals("Sword")||i[0].equals("Bow")
+                    ||i[0].equals("Wand")){
                 equipables.add(i);
             }
         }
         return equipables; //equ[3]
     }
+    public boolean displayInv(){
+        String inv = getInvString();
+        String[] options = {"Close", "Equip"};
+        int choice = JOptionPane.showOptionDialog(null, inv, "Inventory", JOptionPane.YES_NO_CANCEL_OPTION,
+                JOptionPane.PLAIN_MESSAGE, null, options, null);
+        if (choice == 1){
+            ArrayList equipables = getEquipables();
+            int equipItem = Integer.parseInt(JOptionPane.showInputDialog(null,
+                    "Type the number corresponding to the item you wish to equip:" + equipables));
+            return true;
+        }
+        return false;
+    }
     public void defend(Enemys monster){
         int attackStrength = monster.attack();
-        hitPoint = (hitPoint > (attackStrength - armorRating) ) ? hitPoint - (attackStrength- armorRating): 0;
-        JOptionPane.showMessageDialog(null, "You did " + (attackStrength- armorRating) + " dmg");
-        if(hitPoint <= 0){
-            JOptionPane.showMessageDialog(null,"You died.");
+        if (attackStrength-armorRating <= 0){
+            JOptionPane.showMessageDialog(null, "You took 0 dmg");
+        }else {
+            hitPoint = (hitPoint > (attackStrength - armorRating)) ? hitPoint - (attackStrength - armorRating) : 0;
+            JOptionPane.showMessageDialog(null, "You took " + (attackStrength - armorRating) + " dmg");
+            if (hitPoint <= 0) {
+                JOptionPane.showMessageDialog(null, "You died.");
+            }
         }
     }
     public int attack(){

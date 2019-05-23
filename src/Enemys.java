@@ -27,8 +27,8 @@ public class Enemys {
     private String[] names = {"Slime","Goblin","Undead","Orc","Giant"};
 
     public void enemyGenerator() {
-        int encounter = (int) (Math.random() * ((5) + 1));
-        int maxHitPoints = maxHitPointsArray[encounter];
+        int encounter = (int) (Math.random() * ((4) + 1));
+        maxHitPoints = maxHitPointsArray[encounter];
         hitPoints = maxHitPoints;
         attack = attackArray[encounter];
         xpGiven = xpGivenArray[encounter];
@@ -58,11 +58,16 @@ public class Enemys {
     }
     public void defend(Character player){
         int attackStrength = player.attack();
-        hitPoints = (hitPoints > (attackStrength - armor)) ? hitPoints - (attackStrength-armor): 0;// checks attack vs dmg and adjusts health
-        JOptionPane.showMessageDialog(null,"You did " + (attackStrength-armor) + " dmg");
-        if(hitPoints <= 0){
-            JOptionPane.showMessageDialog(null,name + " has been defeated");
-            player.addCoins(goldGiven);
+        if (attackStrength <= 0){
+            JOptionPane.showMessageDialog(null,"You did 0 dmg");
+        }else {
+            hitPoints = (hitPoints > (attackStrength - armor)) ? hitPoints - (attackStrength - armor) : 0;// checks attack vs dmg and adjusts health
+            JOptionPane.showMessageDialog(null, "You did " + (attackStrength - armor) + " dmg");
+
+            if (hitPoints <= 0) {
+                JOptionPane.showMessageDialog(null, name + " has been defeated");
+                player.addCoins(goldGiven);
+            }
         }
     }
 

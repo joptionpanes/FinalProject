@@ -6,6 +6,7 @@ public class Save {
     private static String saveLocation = "C:\\ProgramData\\" + gameName + "\\saves";
     private static String mapLocation = saveLocation + "\\map";
 
+
     public static void saveToFile(Object[][][] details){
         Object[][][] testSave = {
                 {
