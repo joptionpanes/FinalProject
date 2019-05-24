@@ -70,6 +70,7 @@ public class Enemys {
             if (hitPoints <= 0) {
                 JOptionPane.showMessageDialog(null, name + " has been defeated");
                 player.addCoins(goldGiven);
+                killCountArray[encounter] = killCountArray[encounter] + 1;
             }
         }
     }
