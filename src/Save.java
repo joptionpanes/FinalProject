@@ -6,13 +6,17 @@ public class Save {
     private static String saveLocation = "C:\\ProgramData\\" + gameName + "\\saves";
     private static String mapLocation = saveLocation + "\\map";
 
-    public static void saveToFile(){
+
+    public static void saveToFile(Object[][][] details){
         Object[][][] testSave = {
                 {
                         {"Name", 10}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {} //inventory
                 },
                 {
                         {"Item Name", 10}, {}, {}, {} //armor
+                },
+                {
+                        {10, 11}, {143}, {1} //current x/y pos, score, class
                 },
 
         };
@@ -27,26 +31,25 @@ public class Save {
             }
             try { //tries writing to file
                 ObjectOutputStream os = new ObjectOutputStream(new FileOutputStream(saveFile));
-/////////                //os.writeObject(); //insert name of var to write here
+                os.writeObject(details); //insert name of var to write here
             } catch (IOException e) {
                 JOptionPane.showMessageDialog(null, e, "Exception", JOptionPane.ERROR_MESSAGE);
             }
         }
     }
-    public static Object[] loadFromFile(){
+    public static Object[][][] loadFromFile(){
         JFileChooser selectedFile = new JFileChooser(saveLocation); //load dialog opens in saves folder
         if (selectedFile.showOpenDialog(null) == JFileChooser.APPROVE_OPTION) { //if user selects open
             File saveFile = selectedFile.getSelectedFile(); //saveFile = save file location
-            try { //tries reading and returning file as Object[]
+            try { //tries reading and returning file as Object[][][]
                 ObjectInputStream is = new ObjectInputStream(new FileInputStream(saveFile));
-                return (Object[])is.readObject();
+                return (Object[][][])is.readObject();
             } catch (IOException | ClassNotFoundException e) {
                 JOptionPane.showMessageDialog(null, e, "Exception", JOptionPane.ERROR_MESSAGE);
             }
         }
         JOptionPane.showMessageDialog(null, "Error, empty file selected", "Error", JOptionPane.ERROR_MESSAGE);
-        Object[] empty = {};
-        return empty;
+        return null;
     }
     public static String getSaveLocation(){
         return saveLocation;
@@ -67,7 +70,7 @@ public class Save {
     }
     public static void setMapAtPos(int x, int y, String s){
         File map = new File(mapLocation + "\\x" + x + "y" + y);
-        try {
+        try { //tries creating file
             map.createNewFile();
         }catch (IOException e){
             System.out.println("Exception in creating map file:\n" + e);
@@ -75,6 +78,21 @@ public class Save {
         try { //tries writing to file
             ObjectOutputStream os = new ObjectOutputStream(new FileOutputStream(map));
                 os.writeObject(s); //insert name of var to write here
+        } catch (IOException e) {
+            JOptionPane.showMessageDialog(null, e, "Exception", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+    public static void setMapAtPos(int x, int y, String s, Object[] cityDetails){
+        Object[] city = {s,cityDetails};
+        File map = new File(mapLocation + "\\x" + x + "y" + y);
+        try { //tries creating file
+            map.createNewFile();
+        }catch (IOException e){
+            System.out.println("Exception in creating map file:\n" + e);
+        }
+        try { //tries writing to file
+            ObjectOutputStream os = new ObjectOutputStream(new FileOutputStream(map));
+            os.writeObject(city); //insert name of var to write here
         } catch (IOException e) {
             JOptionPane.showMessageDialog(null, e, "Exception", JOptionPane.ERROR_MESSAGE);
         }

@@ -1,12 +1,20 @@
+import javax.swing.*;
+import java.util.ArrayList;
+
 public class Character {
 
     private int playerClass; //Classes 0-2, 0 = swordsman, 1 = archer, 2 = mage
     private int coins;
-    private Object[][] inventory = new Object[20][2]; //[20 inv slots.] [Name, number]
+    private int dmg; // needs to be set  i don't like your arrays so you do it
+    private int hitPoint = 100;
+    private int maxHp = hitPoint;
+    private int armorRating; // needs to be set  i don't like your arrays so you do it
+    private static Object[][] inventory = new Object[20][2]; //[20 inv slots.] [Name, number]
     private Object[][] armor = new Object[4][2]; //[4 armor slots] [Name, protection]
     //armor names should be structured like: Material (Iron), Piece (Helmet), Armor
     private String[] armorPieces = {"Helmet", "Chestplate", "Leggings", "Boots"}; //4 armor pieces
     private Object[] defaultEmpty = {"EMPTY", 0};
+
 
     public Character(){ //defaults
         playerClass = 0;
@@ -22,9 +30,17 @@ public class Character {
 
     public void setPlayerClass(int c){
         playerClass = c;
+        if (c == 0){
+            addInventory("Basic Shortsword", 5);
+        }else if (c == 1){
+            addInventory("Basic Shortbow", 5);
+        }else if (c == 2){
+            addInventory("Basic Wand", 5);
+        }else
+            System.out.println("Error when selecting class. Does not exist!");
     }
-    public void setCoins(int c){
-        coins = c;
+    public void addCoins(int c){
+        coins = coins + c;
     }
     public boolean addInventory(String name, int number){
         boolean itemPlaced = false;
@@ -46,17 +62,23 @@ public class Character {
         return itemPlaced;
     }
     public Object[] equipArmor(String name, int prot){
-        int i = 0;
+
         Object[] prev = defaultEmpty;
 
-        for (String p : armorPieces){
-            if (name.toLowerCase().contains(p.toLowerCase())){ //checks name of item to put in correct slot
-                prev = armor[i];
+        for (int i = 0; i < armor.length; i++){
+            if (name.contains(armorPieces[i])){ //checks name of item to put in correct slot
+                prev = armor[i]; //
 
                 armor[i][0] = name;
                 armor[i][1] = prot;
+                System.out.println(name + " added to " + armorPieces[i]);
+                System.out.println(getArmorString());
             }
-            i++;
+        }
+
+        for (int a = 0; a < armor.length; a++){
+            armorRating = armorRating + (int)armor[a][1];
+            System.out.println(armorRating);
         }
         return prev; //return the previously worn armor so it isn't deleted and can be put in the inv
     }
@@ -69,7 +91,7 @@ public class Character {
         return coins;
     }
 
-    public Object[][] getInventory(){
+    public static Object[][] getInventory(){
         return inventory;
     }
     public Object[][] getArmor(){
@@ -116,7 +138,45 @@ public class Character {
         }
         return arm.toString();
     }
-    public void party(){
-
+    public static ArrayList getEquipables(){
+        ArrayList<Object[]> equipables = new ArrayList<>();
+        for (Object[] i : inventory){
+            if (i[0].equals("Armor")||i[0].equals("Catalyst")||i[0].equals("Sword")||i[0].equals("Bow")
+                    ||i[0].equals("Wand")){
+                equipables.add(i);
+            }
+        }
+        return equipables; //equ[3]
+    }
+    public boolean displayInv(){
+        String inv = getInvString();
+        String[] options = {"Close", "Equip"};
+        int choice = JOptionPane.showOptionDialog(null, inv, "Inventory", JOptionPane.YES_NO_CANCEL_OPTION,
+                JOptionPane.PLAIN_MESSAGE, null, options, null);
+        if (choice == 1){
+            ArrayList equipables = getEquipables();
+            int equipItem = Integer.parseInt(JOptionPane.showInputDialog(null,
+                    "Type the number corresponding to the item you wish to equip:" + equipables));
+            return true;
+        }
+        return false;
+    }
+    public void defend(Enemys monster){
+        int attackStrength = monster.attack();
+        if (attackStrength-armorRating <= 0){
+            JOptionPane.showMessageDialog(null, "You took 0 dmg");
+        }else {
+            hitPoint = (hitPoint > (attackStrength - armorRating)) ? hitPoint - (attackStrength - armorRating) : 0;
+            JOptionPane.showMessageDialog(null, "You took " + (attackStrength - armorRating) + " dmg");
+            if (hitPoint <= 0) {
+                JOptionPane.showMessageDialog(null, "You died.");
+            }
+        }
+    }
+    public int attack(){
+        return dmg;
+    }
+    public boolean isAlive(){
+        return hitPoint > 0;
     }
 }
