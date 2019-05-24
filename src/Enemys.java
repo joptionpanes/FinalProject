@@ -1,6 +1,7 @@
 import javax.swing.*;
 
 public class Enemys {
+    private boolean dragonKilled = false;
     private int maxHitPoints;
     private int hitPoints;
     private int attack;
@@ -8,7 +9,7 @@ public class Enemys {
     private int goldGiven;
     private int armor;
     private String name;
-    private int[] killCountArray = new int[5];
+    private int[] killCountArray = new int[6];
     private int encounter;
 
     private int[] maxHitPointsArray = {(int) (Math.random()*((10-1)+1))+1,(int)(Math.random()*((15-5)+1))+5,(int)
@@ -43,11 +44,19 @@ public class Enemys {
     public void newDragon(){
         maxHitPoints=(int) (Math.random()*((100-80)+1))+80;
         hitPoints = maxHitPoints;
+        encounter = 6;
         attack = (int) (Math.random()*((70-60)+1))+60;
         armor = (int)(Math.random()*((15-10)+1))+10;
         xpGiven = (int)(Math.random() *((60-50))+1)+50;
         goldGiven = (int)(Math.random()*((60-50))+1)+50;
         name = "Dragon";
+    }
+    public int enemiesKilled(){
+        int total = 0;
+        for(int k = 0; k < killCountArray.length; k++){
+            total +=killCountArray[k];
+        }
+        return total;
     }
 
     public String MonName(){
@@ -71,6 +80,9 @@ public class Enemys {
                 JOptionPane.showMessageDialog(null, name + " has been defeated");
                 player.addCoins(goldGiven);
                 killCountArray[encounter] = killCountArray[encounter] + 1;
+                if (name.equals("Dragon")){
+                    dragonKilled = true;
+                }
             }
         }
     }
@@ -79,4 +91,7 @@ public class Enemys {
         return hitPoints > 0;
     }
 
+    public boolean isDragonKilled() {
+        return dragonKilled;
+    }
 }

@@ -11,8 +11,10 @@ public class Character {
     private int armorRating; // needs to be set  i don't like your arrays so you do it
     private static Object[][] inventory = new Object[20][2]; //[20 inv slots.] [Name, number]
     private Object[][] armor = new Object[4][2]; //[4 armor slots] [Name, protection]
+    private Object[] weapon = new Object[2]; //[Name, damage]
     //armor names should be structured like: Material (Iron), Piece (Helmet), Armor
     private String[] armorPieces = {"Helmet", "Chestplate", "Leggings", "Boots"}; //4 armor pieces
+    private String[] weapons = {"Sword", "Bow", "Wand"};
     private Object[] defaultEmpty = {"EMPTY", 0};
 
 
@@ -61,7 +63,7 @@ public class Character {
         }
         return itemPlaced;
     }
-    public Object[] equipArmor(String name, int prot){
+    public Object[] equip(String name, int prot){
 
         Object[] prev = defaultEmpty;
 
@@ -78,6 +80,14 @@ public class Character {
         for (int a = 0; a < armor.length; a++){
             armorRating = armorRating + (int)armor[a][1];
             System.out.println(armorRating);
+        }
+        if (name.contains(weapons[0])||name.contains(weapons[1])||name.contains(weapons[2])){ //checks if it is a weapon
+            prev = weapon; //saves item in that slot so it can be returned to inv
+            Object[] curr = {name, prot};
+            weapon = curr;
+            dmg = prot;
+            System.out.println(name + " added to weapon slot");
+            System.out.println(weapon[0].toString() + " [" + weapon[1].toString() + "]");
         }
         return prev; //return the previously worn armor so it isn't deleted and can be put in the inv
     }
@@ -156,9 +166,18 @@ public class Character {
                 JOptionPane.PLAIN_MESSAGE, null, options, null);
         if (choice == 1){
             ArrayList<Object[]> equipables = getEquipables();
-            int equipItem = Integer.parseInt(JOptionPane.showInputDialog(null,
-                    "Type the number corresponding to the item you wish to equip:\n" + convert(equipables)));
-            equipArmor(equipables.get(equipItem)[0].toString(), (int)equipables.get(equipItem)[1]);
+            boolean acceptableValue = false;
+            do{
+                try {
+                    int equipItem = Integer.parseInt(JOptionPane.showInputDialog(null,
+                            "Type the number corresponding to the item you wish to equip:\n" + convert(equipables)));
+                    equip(equipables.get(equipItem)[0].toString(), (int)equipables.get(equipItem)[1]);
+                    acceptableValue = true;
+                }catch(NumberFormatException|IndexOutOfBoundsException e){
+                    System.out.println(e);
+                }
+
+            }while(!acceptableValue);
             return true;
         }
         return false;
@@ -171,7 +190,7 @@ public class Character {
             hitPoint = (hitPoint > (attackStrength - armorRating)) ? hitPoint - (attackStrength - armorRating) : 0;
             JOptionPane.showMessageDialog(null, "You took " + (attackStrength - armorRating) + " dmg");
             if (hitPoint <= 0) {
-                JOptionPane.showMessageDialog(null, "You died.");
+                Score.End();
             }
         }
     }
