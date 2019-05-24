@@ -67,15 +67,14 @@ public class Character {
 
         for (int i = 0; i < armor.length; i++){
             if (name.contains(armorPieces[i])){ //checks name of item to put in correct slot
-                prev = armor[i]; //
-
-                armor[i][0] = name;
-                armor[i][1] = prot;
+                prev = armor[i]; //saves item in that slot so it can be returned to inv
+                Object[] curr = {name, prot};
+                armor[i] = curr;
                 System.out.println(name + " added to " + armorPieces[i]);
                 System.out.println(getArmorString());
             }
         }
-
+        armorRating = 0;
         for (int a = 0; a < armor.length; a++){
             armorRating = armorRating + (int)armor[a][1];
             System.out.println(armorRating);
@@ -138,11 +137,13 @@ public class Character {
         }
         return arm.toString();
     }
-    public static ArrayList getEquipables(){
+    public ArrayList<Object[]> getEquipables(){
         ArrayList<Object[]> equipables = new ArrayList<>();
         for (Object[] i : inventory){
-            if (i[0].equals("Armor")||i[0].equals("Catalyst")||i[0].equals("Sword")||i[0].equals("Bow")
-                    ||i[0].equals("Wand")){
+            String itemName = i[0].toString();
+            if (itemName.contains("Armor")||itemName.contains("Catalyst")||itemName.contains("Sword")||
+                    itemName.contains("Bow")||itemName.contains("Wand")||itemName.contains("Helmet")||
+                    itemName.contains("Chestplate")||itemName.contains("Leggings")||itemName.contains("Boots")){
                 equipables.add(i);
             }
         }
@@ -154,16 +155,17 @@ public class Character {
         int choice = JOptionPane.showOptionDialog(null, inv, "Inventory", JOptionPane.YES_NO_CANCEL_OPTION,
                 JOptionPane.PLAIN_MESSAGE, null, options, null);
         if (choice == 1){
-            ArrayList equipables = getEquipables();
+            ArrayList<Object[]> equipables = getEquipables();
             int equipItem = Integer.parseInt(JOptionPane.showInputDialog(null,
-                    "Type the number corresponding to the item you wish to equip:" + equipables));
+                    "Type the number corresponding to the item you wish to equip:\n" + convert(equipables)));
+            equipArmor(equipables.get(equipItem)[0].toString(), (int)equipables.get(equipItem)[1]);
             return true;
         }
         return false;
     }
     public void defend(Enemys monster){
         int attackStrength = monster.attack();
-        if (attackStrength-armorRating <= 0){
+        if (attackStrength - armorRating <= 0){
             JOptionPane.showMessageDialog(null, "You took 0 dmg");
         }else {
             hitPoint = (hitPoint > (attackStrength - armorRating)) ? hitPoint - (attackStrength - armorRating) : 0;
@@ -178,5 +180,14 @@ public class Character {
     }
     public boolean isAlive(){
         return hitPoint > 0;
+    }
+    public String convert(ArrayList<Object[]> a){
+        StringBuilder s = new StringBuilder();
+        int i = 0;
+        for (Object[] n : a){
+            s.append(i + ": " + n[0].toString() + " [" + n[1].toString() + "], ");
+            i++;
+        }
+        return s.toString();
     }
 }
