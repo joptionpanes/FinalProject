@@ -2,13 +2,13 @@ import javax.swing.*;
 
 public class Movement {
 
-    /*      !TO DO BEFORE FINiSHED!         *
-    * 1.Add in inventory                    *
-    * 2.Add a way to exit and save          *
-    * 3.Send encounters to the right methods*
-    *                                       *
-    * -Alex Anderson                        *
-    ****************************************/
+    /*      !TO DO BEFORE FINiSHED!          *
+     * 1.Add in inventory                     *
+     * 2.Add a way to exit and save           *
+     * 3.Send encounters to the right methods *
+     *                                        *
+     * -Alex Anderson                         *
+     *****************************************/
 
     //VARIABLES
     private static int x = 0;
@@ -119,7 +119,7 @@ public class Movement {
     }
     public static void caveEncounter(){
         if (location == DRAGON_LAIR);
-                //dragonsLair();
+        //dragonsLair();
     }
 
 
