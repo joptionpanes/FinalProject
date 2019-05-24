@@ -15,7 +15,6 @@ public class Movement {
     private static int y = 0;
     private static int[] location = { x, y };
     final private static int[] DRAGON_LAIR = {100, 100};
-    private static int moveRand;
     private static int moveRand1;
     private static int moveRand2;
     private static int movesBeforeEncounter = 1;
@@ -57,47 +56,35 @@ public class Movement {
 
     //MOVEMENT METHODS
     public static void moveNorth(){
-        System.out.println("Moving North");
         y -= 1;
         movesBeforeEncounter();
         moveRand1 = (int)(Math.random() * range) + min;
         moveRand2 = (int)(Math.random() * range) + min;
-        if(moveRand1 == moveRand2){
-            encounter();
-        }
+        if(moveRand1 == moveRand2){ encounter(); }
     }
 
     public static void moveWest(){
-        System.out.println("Moving West");
         x -= 1;
         movesBeforeEncounter();
         moveRand1 = (int)(Math.random() * range) + min;
         moveRand2 = (int)(Math.random() * range) + min;
-        if(moveRand1 == moveRand2){
-            encounter();
-        }
+        if(moveRand1 == moveRand2){ encounter(); }
     }
 
     public static void moveEast(){
-        System.out.println("Moving East");
         x += 1;
         movesBeforeEncounter();
         moveRand1 = (int)(Math.random() * range) + min;
         moveRand2 = (int)(Math.random() * range) + min;
-        if(moveRand1 == moveRand2){
-            encounter();
-        }
+        if(moveRand1 == moveRand2){ encounter(); }
     }
 
     public static void moveSouth(){
-        System.out.println("Moving South");
         y += 1;
         movesBeforeEncounter();
         moveRand1 = (int)(Math.random() * range) + min;
         moveRand2 = (int)(Math.random() * range) + min;
-        if(moveRand1 == moveRand2){
-            encounter();
-        }
+        if(moveRand1 == moveRand2){ encounter(); }
     }
 
 
@@ -105,21 +92,16 @@ public class Movement {
     public static void movesBeforeEncounter(){ movesBeforeEncounter++; }
 
     public static void encounter(){
-        movesBeforeEncounter = 0; //chances 20 70 10
+        int moveRand;
+
+        movesBeforeEncounter = 0;
         moveRand = (int)(Math.random() * range) + min;
-        if(moveRand == 1){
-            //wandererEncounter();
-        }
-        else if(moveRand == 2 || moveRand1 == 3){
-            //cityEncounter();
-        }
-        else{
-            //enemyEncounter();
-        }
+        if(moveRand == 1){/*wander encounter*/}
+        else if(moveRand == 2 || moveRand1 == 3){/*city encounter*/}
+        else{/*enemy encounter*/}
     }
     public static void caveEncounter(){
-        if (location == DRAGON_LAIR);
-        //dragonsLair();
+        if (location == DRAGON_LAIR){/*dragon encounter*/}
     }
 
 
