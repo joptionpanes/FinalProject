@@ -8,6 +8,8 @@ public class Enemys {
     private int goldGiven;
     private int armor;
     private String name;
+    private int[] killCountArray = new int[5];
+    private int encounter;
 
     private int[] maxHitPointsArray = {(int) (Math.random()*((10-1)+1))+1,(int)(Math.random()*((15-5)+1))+5,(int)
             (Math.random()*((10-8)+1))+8,(int) (Math.random()*((30-20)+1))+20,(int) (Math.random()*((60-40)+1))+40};
@@ -27,6 +29,7 @@ public class Enemys {
     private String[] names = {"Slime","Goblin","Undead","Orc","Giant"};
 
     public void enemyGenerator() {
+        encounter = (int) (Math.random() * ((5) + 1));
         int encounter = (int) (Math.random() * ((4) + 1));
         maxHitPoints = maxHitPointsArray[encounter];
         hitPoints = maxHitPoints;
