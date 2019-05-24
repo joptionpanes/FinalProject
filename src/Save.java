@@ -21,26 +21,26 @@ public class Save {
 
         };
         JFileChooser selectedFile = new JFileChooser(saveLocation); //save dialog opens in saves folder
-
-        if (selectedFile.showSaveDialog(null) == JFileChooser.APPROVE_OPTION) { //if user selects save
-            File saveFile = selectedFile.getSelectedFile(); //saveFile = save file location
-            try { //tries saving file
-                saveFile.createNewFile();
-            } catch (IOException e){
-                JOptionPane.showMessageDialog(null, e, "Exception", JOptionPane.ERROR_MESSAGE);
-            }
-            try { //tries writing to file
-                ObjectOutputStream os = new ObjectOutputStream(new FileOutputStream(saveFile));
-                os.writeObject(details); //insert name of var to write here
-            } catch (IOException e) {
-                JOptionPane.showMessageDialog(null, e, "Exception", JOptionPane.ERROR_MESSAGE);
-            }
+        String sF = selectedFile.getCurrentDirectory().toString();
+        File saveFile = new File(sF + "\\save"); //saveFile = save file location
+        try { //tries saving file
+            saveFile.createNewFile();
+        } catch (IOException e){
+            JOptionPane.showMessageDialog(null, e, "Exception", JOptionPane.ERROR_MESSAGE);
+        }
+        try { //tries writing to file
+            ObjectOutputStream os = new ObjectOutputStream(new FileOutputStream(saveFile));
+            os.writeObject(testSave); //insert name of var to write here
+        } catch (IOException e) {
+            JOptionPane.showMessageDialog(null, e, "Exception", JOptionPane.ERROR_MESSAGE);
         }
     }
     public static Object[][][] loadFromFile(){
         JFileChooser selectedFile = new JFileChooser(saveLocation); //load dialog opens in saves folder
+        selectedFile.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
         if (selectedFile.showOpenDialog(null) == JFileChooser.APPROVE_OPTION) { //if user selects open
-            File saveFile = selectedFile.getSelectedFile(); //saveFile = save file location
+            String sF = selectedFile.getCurrentDirectory().toString();
+            File saveFile = new File(sF + "\\save"); //saveFile = save file location
             try { //tries reading and returning file as Object[][][]
                 ObjectInputStream is = new ObjectInputStream(new FileInputStream(saveFile));
                 return (Object[][][])is.readObject();

@@ -46,7 +46,7 @@ public class Movement {
         else if(response == 3)
             moveWest();
         else if(response == 4)
-            Start.player.getInvString();
+            Start.player.displayInv();
         else if(response == 5)
             exitAndSave();
 

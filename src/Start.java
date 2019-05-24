@@ -32,6 +32,7 @@ public class Start {
             map.mkdirs(); //make the map folder
             Save.setMapLocation(); //set map folder location to newly created map folder
             Object[][][] save = {};
+            Save.saveToFile(save);
             startGame(save);
         }
         else if (selection == 1){ //load existing
