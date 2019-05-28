@@ -90,8 +90,7 @@ public class Character {
                 String item = inventory[i][0].toString();
                 if (item.equals(name) && !item.contains(armorPieces[0]) && !item.contains(armorPieces[1]) &&
                         !item.contains(armorPieces[2]) && !item.contains(armorPieces[3]) &&
-                        !item.contains(weapons[0]) && !item.contains(weapons[1]) && !item.contains(weapons[2])
-                        && !item.contains(weapons[3])) {
+                        !item.contains(weapons[0]) && !item.contains(weapons[1]) && !item.contains(weapons[2])) {
                     //if the item at i slot is the same as the one being added, and does not contain armor
                     int num2 = Integer.parseInt(String.valueOf(inventory[i][1])); //current number of items in inv
                     Object[] inventoryItem = {name, number + num2}; //add them together and
