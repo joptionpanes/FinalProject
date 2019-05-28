@@ -28,7 +28,8 @@ public class Movement {
     //MOVEMENT MAIN METHOD
     public static void movementMain(){
         //Making The Control Panel for Movement
-        String[] options = new String[] {"Move North", "Move South", "Move East", "Move West", "Inventory", "Exit and Save"};
+        String[] options = new String[] {"Move North", "Move South", "Move East", "Move West",
+                "Inventory", "Save", "Exit and Save"};
         int response = JOptionPane.showOptionDialog(null, "Control Panel", "Movement",
                 JOptionPane.DEFAULT_OPTION, JOptionPane.PLAIN_MESSAGE,
                 null, options, options[0]);
@@ -46,8 +47,10 @@ public class Movement {
         else if(response == 3)
             moveWest();
         else if(response == 4)
-            Start.player.getInvString();
-        else if(response == 5)
+            Start.player.displayInv();
+        else if (response == 5)
+            save();
+        else if(response == 6 || response == -1)
             exitAndSave();
 
         location[0] = x;
@@ -57,74 +60,119 @@ public class Movement {
 
     //MOVEMENT METHODS
     public static void moveNorth(){
-        System.out.println("Moving North");
-        y -= 1;
-        movesBeforeEncounter();
-        moveRand1 = (int)(Math.random() * range) + min;
-        moveRand2 = (int)(Math.random() * range) + min;
-        if(moveRand1 == moveRand2){
-            encounter();
+        y += 1;
+        System.out.println("Moving North to: " + x + ", " + y);
+        if (checkForExistingCity() != 0) {
+            movesBeforeEncounter();
+            moveRand1 = (int) (Math.random() * range) + min;
+            moveRand2 = (int) (Math.random() * range) + min;
+            if (moveRand1 == moveRand2) {
+                encounter();
+            } else
+                Save.setMapAtPos(x, y, "NULL", null);
         }
     }
 
     public static void moveWest(){
-        System.out.println("Moving West");
         x -= 1;
-        movesBeforeEncounter();
-        moveRand1 = (int)(Math.random() * range) + min;
-        moveRand2 = (int)(Math.random() * range) + min;
-        if(moveRand1 == moveRand2){
-            encounter();
+        System.out.println("Moving West to: " + x + ", " + y);
+        if (checkForExistingCity() != 0) {
+            movesBeforeEncounter();
+            moveRand1 = (int) (Math.random() * range) + min;
+            moveRand2 = (int) (Math.random() * range) + min;
+            if (moveRand1 == moveRand2) {
+                encounter();
+            } else
+                Save.setMapAtPos(x, y, "NULL", null);
+        } else {
+            Encounters encounter = new Encounters();
+            encounter.loadCity();
         }
     }
 
     public static void moveEast(){
-        System.out.println("Moving East");
         x += 1;
-        movesBeforeEncounter();
-        moveRand1 = (int)(Math.random() * range) + min;
-        moveRand2 = (int)(Math.random() * range) + min;
-        if(moveRand1 == moveRand2){
-            encounter();
+        System.out.println("Moving East to: " + x + ", " + y);
+        if (checkForExistingCity() != 0) {
+            movesBeforeEncounter();
+            moveRand1 = (int) (Math.random() * range) + min;
+            moveRand2 = (int) (Math.random() * range) + min;
+            if (moveRand1 == moveRand2) {
+                encounter();
+            } else
+                Save.setMapAtPos(x, y, "NULL", null);
         }
     }
 
     public static void moveSouth(){
-        System.out.println("Moving South");
-        y += 1;
-        movesBeforeEncounter();
-        moveRand1 = (int)(Math.random() * range) + min;
-        moveRand2 = (int)(Math.random() * range) + min;
-        if(moveRand1 == moveRand2){
-            encounter();
+        y -= 1;
+        System.out.println("Moving South to: " + x + ", " + y);
+        if (checkForExistingCity() != 0) {
+            movesBeforeEncounter();
+            moveRand1 = (int) (Math.random() * range) + min;
+            moveRand2 = (int) (Math.random() * range) + min;
+            if (moveRand1 == moveRand2) {
+                encounter();
+            } else
+                Save.setMapAtPos(x, y, "NULL", null);
         }
     }
 
 
     //ENCOUNTER METHODS
-    public static void movesBeforeEncounter(){ movesBeforeEncounter++; }
+    public static void movesBeforeEncounter(){
+        movesBeforeEncounter++;
+        range = max - movesBeforeEncounter + 1;
+    }
 
     public static void encounter(){
-        movesBeforeEncounter = 0; //chances 20 70 10
-        moveRand = (int)(Math.random() * range) + min;
-        if(moveRand == 1){
-            //wandererEncounter();
+        movesBeforeEncounter = 0; //chances 10 30 60
+        moveRand = (int)(Math.random() * 10) + 1;
+        Encounters encounter = new Encounters();
+        if(moveRand <= 1){
+            System.out.println("Wander encounter");
+            Save.setMapAtPos(x, y, "NULL", null);
+            encounter.generateWandererShop();
         }
-        else if(moveRand == 2 || moveRand1 == 3){
-            //cityEncounter();
+        else if((moveRand >= 7) && checkForExistingCity() == -1){
+            System.out.println("City encounter");
+            encounter.generateCity();
         }
         else{
-            //enemyEncounter();
+            System.out.println("Enemy encounter");
+            Save.setMapAtPos(x, y, "NULL", null);
+            encounter.generateBattle();
         }
     }
+
     public static void caveEncounter(){
         if (location == DRAGON_LAIR);
         //dragonsLair();
     }
 
+    public static int checkForExistingCity(){ //0 = does exist, 1 = doesn't exist, -1 = not generated
+        Object[][] save = Save.getMapAtPos(x, y);
+        if (save == null) {
+            return -1;
+        } else if (save[0][0].equals("NULL")){
+            return 1;
+        } else {
+            Encounters encounter = new Encounters();
+            encounter.loadCity();
+            return 0;
+        }
+    }
+
 
     //EXIT AND SAVE METHODS
-    public static void exitAndSave(){ System.out.println("Exited and Saved"); }
+    public static void exitAndSave(){
+        Start.player.save();
+        System.exit(3);
+    }
+
+    public static void save(){
+        Start.player.save();
+    }
 
 
     //SETTER METHODS

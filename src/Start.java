@@ -1,4 +1,3 @@
-//https://stackoverflow.com/questions/13707223/how-to-write-an-array-to-a-file-java
 import javax.swing.*;
 import java.io.*;
 
@@ -17,39 +16,46 @@ public class Start {
                         "Error", JOptionPane.ERROR_MESSAGE); //if an error occurred, say so.
             }
         }
-        String[] options = {"Start New", "Load Existing"};
 
+        String[] options = {"Start New", "Load Existing"};
         int selection = JOptionPane.showOptionDialog(null, "Welcome to " + Save.getGameName() + ". Select an option:",
                 Save.getGameName(), JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE, null, options, null);
+        if (selection == -1){ //if user clicked x
+            System.exit(3);
+        }
         if (selection == 0){ //start new
-            JFileChooser selectedFile;
-            do {
-                selectedFile = new JFileChooser(saveLocation); //save dialog opens in saves folder
-            }while (selectedFile.showDialog(null, "Enter name of new save folder") != JFileChooser.APPROVE_OPTION);
-            Save.setSaveLocation(selectedFile.getSelectedFile()); //saveFile = save file location
-            File saveFile = selectedFile.getSelectedFile();
+            JFileChooser selectFile = new JFileChooser(saveLocation); //save dialog opens in saves folder
+            int selectValue = selectFile.showDialog(null, "Enter name of new save folder");
+            if (selectValue != JFileChooser.APPROVE_OPTION){ //if user selects x or cancel
+                main(args);
+                System.exit(2);
+            }
+            Save.setSaveLocation(selectFile.getSelectedFile());
+            File saveFile = selectFile.getSelectedFile(); //saveFile = save file location
             File map = new File(saveFile + "\\map");
             map.mkdirs(); //make the map folder
             Save.setMapLocation(); //set map folder location to newly created map folder
-            Object[][][] save = {};
-            startGame(save);
+
+            //class selection
+            String[] classes = player.getClasses();
+            int classChoice;
+            do {
+                classChoice = JOptionPane.showOptionDialog(null, "Choose your class.\nThey do more damage with their " +
+                                "respective weapons", "Class selection", JOptionPane.YES_NO_CANCEL_OPTION,
+                        JOptionPane.PLAIN_MESSAGE, null, classes, null);
+            }while(classChoice==-1);
+            player.setPlayerClass(classChoice);
+            Save.setMapAtPos(0, 0, "NULL", null);
+            player.save();
         }
         else if (selection == 1){ //load existing
-            Object[][][] save = Save.loadFromFile();
-            startGame(save);
+            if (!player.load()){ //if user cancelled or clicked x
+                main(args);
+                System.exit(2);
+            }
         }
-    }
-    public static void startGame(Object[][][] save){
-        Character player = new Character();
-        String[] classes = {"Swordsman", "Archer", "Mage"};
-        int classChoice;
-        do {
-            classChoice = JOptionPane.showOptionDialog(null, "Choose your class.\nThey do more damage with their " +
-                        "respective attack methods", "Class selection", JOptionPane.YES_NO_CANCEL_OPTION,
-                JOptionPane.PLAIN_MESSAGE, null, classes, null);
-            player.setPlayerClass(classChoice);
-        }while(classChoice==-1);
-        System.out.println(classChoice + ": " + classes[classChoice]);
-        Movement.movementMain();
+        while (true) {
+            Movement.movementMain();
+        }
     }
 }
