@@ -204,10 +204,10 @@ public class Encounters {
                     }
                 } else {
                     int acceptQuest = JOptionPane.showConfirmDialog(null, "The offered quest is:\n" + questString +
-                                    "\nAccept for 20 coins? You have " + Start.player.getCoins(), "Quest",
+                                    "\nAccept for 10 coins? You have " + Start.player.getCoins(), "Quest",
                             JOptionPane.YES_NO_OPTION);
                     if (acceptQuest == 0) {
-                        if (Start.player.getCoins() < 20) {
+                        if (Start.player.getCoins() < 10) {
                             JOptionPane.showMessageDialog(null, "You don't have enough coins to accept the quest!");
                         } else if (Start.player.activeQuest()) {
                             JOptionPane.showMessageDialog(null, "You already have an active quest!");
