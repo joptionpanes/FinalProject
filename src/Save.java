@@ -92,4 +92,32 @@ public class Save {
         return null;
     }
 
+    public static void initMap(){
+        Save.setMapAtPos(0, 0, "NULL", null);
+        for (int i = 0; i < (100 * 20); i += 100){
+            int randomX = (int)(Math.random() * 10);
+            for (int j = 0; j < (100 * 20); j += 100){
+                int randomY = (int)(Math.random() * 10);
+                if (i == 0 && j == 0){
+                    System.out.println("0, 0 dragon not generated");
+                } else {
+                    Save.setMapAtPos(i + randomX, j + randomY, "BOSS", null);
+                }
+            }
+
+        }
+        for (int i = 0; i > -(100 * 20); i -= 100){
+            int randomX = (int)(Math.random() * 10);
+            for (int j = 0; j > -(100 * 20); j -= 100){
+                int randomY = (int)(Math.random() * 10);
+                if (i == 0 && j == 0){
+                    System.out.println("0, 0 dragon not generated");
+                } else {
+                    Save.setMapAtPos(i + randomX, j + randomY, "BOSS", null);
+                }
+            }
+
+        }
+    }
+
 }

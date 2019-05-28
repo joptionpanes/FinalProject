@@ -45,7 +45,7 @@ public class Start {
                         JOptionPane.PLAIN_MESSAGE, null, classes, null);
             }while(classChoice==-1);
             player.setPlayerClass(classChoice);
-            Save.setMapAtPos(0, 0, "NULL", null);
+            Save.initMap();
             player.save();
         }
         else if (selection == 1){ //load existing

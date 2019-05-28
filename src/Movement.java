@@ -14,7 +14,6 @@ public class Movement {
     private static int x = 0;
     private static int y = 0;
     private static int[] location = { x, y };
-    final private static int[] DRAGON_LAIR = {100, 100};
     private static int moveRand;
     private static int moveRand1;
     private static int moveRand2;
@@ -62,7 +61,8 @@ public class Movement {
     public static void moveNorth(){
         y += 1;
         System.out.println("Moving North to: " + x + ", " + y);
-        if (checkForExistingCity() != 0) {
+        int exists = checkForExisting();
+        if (exists != 0 && exists != 2) {
             movesBeforeEncounter();
             moveRand1 = (int) (Math.random() * range) + min;
             moveRand2 = (int) (Math.random() * range) + min;
@@ -70,13 +70,16 @@ public class Movement {
                 encounter();
             } else
                 Save.setMapAtPos(x, y, "NULL", null);
+        } else if (exists == 2){
+            caveEncounter();
         }
     }
 
     public static void moveWest(){
         x -= 1;
         System.out.println("Moving West to: " + x + ", " + y);
-        if (checkForExistingCity() != 0) {
+        int exists = checkForExisting();
+        if (exists != 0 && exists != 2) {
             movesBeforeEncounter();
             moveRand1 = (int) (Math.random() * range) + min;
             moveRand2 = (int) (Math.random() * range) + min;
@@ -84,16 +87,16 @@ public class Movement {
                 encounter();
             } else
                 Save.setMapAtPos(x, y, "NULL", null);
-        } else {
-            Encounters encounter = new Encounters();
-            encounter.loadCity();
+        } else if (exists == 2){
+            caveEncounter();
         }
     }
 
     public static void moveEast(){
         x += 1;
         System.out.println("Moving East to: " + x + ", " + y);
-        if (checkForExistingCity() != 0) {
+        int exists = checkForExisting();
+        if (exists != 0 && exists != 2) {
             movesBeforeEncounter();
             moveRand1 = (int) (Math.random() * range) + min;
             moveRand2 = (int) (Math.random() * range) + min;
@@ -101,13 +104,16 @@ public class Movement {
                 encounter();
             } else
                 Save.setMapAtPos(x, y, "NULL", null);
+        } else if (exists == 2){
+            caveEncounter();
         }
     }
 
     public static void moveSouth(){
         y -= 1;
         System.out.println("Moving South to: " + x + ", " + y);
-        if (checkForExistingCity() != 0) {
+        int exists = checkForExisting();
+        if (exists != 0 && exists != 2) {
             movesBeforeEncounter();
             moveRand1 = (int) (Math.random() * range) + min;
             moveRand2 = (int) (Math.random() * range) + min;
@@ -115,6 +121,8 @@ public class Movement {
                 encounter();
             } else
                 Save.setMapAtPos(x, y, "NULL", null);
+        } else if (exists == 2){
+            caveEncounter();
         }
     }
 
@@ -134,7 +142,7 @@ public class Movement {
             Save.setMapAtPos(x, y, "NULL", null);
             encounter.generateWandererShop();
         }
-        else if((moveRand >= 7) && checkForExistingCity() == -1){
+        else if((moveRand >= 9) && checkForExisting() == -1){
             System.out.println("City encounter");
             encounter.generateCity();
         }
@@ -146,16 +154,18 @@ public class Movement {
     }
 
     public static void caveEncounter(){
-        if (location == DRAGON_LAIR);
-        //dragonsLair();
+        Encounters boss = new Encounters();
+        boss.generateBossBattle();
     }
 
-    public static int checkForExistingCity(){ //0 = does exist, 1 = doesn't exist, -1 = not generated
+    public static int checkForExisting(){ //0 = does exist, 1 = doesn't exist, -1 = not generated, 2 = dragon boss
         Object[][] save = Save.getMapAtPos(x, y);
         if (save == null) {
             return -1;
         } else if (save[0][0].equals("NULL")){
             return 1;
+        } else if (save[0][0].equals("BOSS")){
+            return 2;
         } else {
             Encounters encounter = new Encounters();
             encounter.loadCity();

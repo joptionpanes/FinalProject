@@ -213,7 +213,7 @@ public class Encounters {
                             JOptionPane.showMessageDialog(null, "You already have an active quest!");
                         } else {
                             JOptionPane.showMessageDialog(null, "Quest accepted!");
-                            Start.player.removeCoins(20);
+                            Start.player.removeCoins(10);
                             Start.player.setActiveQuest(questDeets);
                         }
                     }
@@ -315,6 +315,28 @@ public class Encounters {
             Object[][] newShop = list.toArray(new Object[][]{}); //turn back into object array
             shopDialog(newShop); //new dialog with new shop
             return newShop;
+        }
+    }
+
+    public void generateBossBattle(){
+        Enemies dragon = new Enemies();
+        dragon.newDragon();
+
+        while (Start.player.isAlive() && dragon.isAlive()) {
+            String[] battleOptions = {"Attack", "Items"};
+            String message = "Fighting " + dragon.MonName() + ". " + dragon.getStatus() +
+                    "\nPlayer hp: " + Start.player.getHitPoints();
+            int result = JOptionPane.showOptionDialog(null, message, "Choose what to do",
+                    JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE, null, battleOptions, null);
+            boolean itemUsed = true;
+            if (result == 0) {
+                dragon.defend();
+            } else {
+                itemUsed = Start.player.displayInv();
+            }
+            if (dragon.isAlive() && itemUsed) {
+                Start.player.defend(dragon);
+            }
         }
     }
 }

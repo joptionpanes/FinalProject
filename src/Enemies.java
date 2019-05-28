@@ -1,7 +1,7 @@
 import javax.swing.*;
 
 public class Enemies {
-    private boolean dragonKilled = false;
+    private static boolean dragonKilled = false;
     private int maxHitPoints;
     private int hitPoints;
     private int attack;
@@ -31,7 +31,11 @@ public class Enemies {
 
     public void enemyGenerator() {
         encounter = (int) (Math.random() * ((5) + 1));
-        int encounter = (int) (Math.random() * ((4) + 1));
+        int level = Start.player.getLevel();
+        if (level > 4){
+            level = 4;
+        }
+        int encounter = (int) (Math.random() * ((level) + 1));
         maxHitPoints = maxHitPointsArray[encounter];
         hitPoints = maxHitPoints;
         attack = attackArray[encounter];
@@ -73,7 +77,7 @@ public class Enemies {
             JOptionPane.showMessageDialog(null, "You did " + (attackStrength - armor) + " damage");
 
             if (hitPoints <= 0) {
-                JOptionPane.showMessageDialog(null, name + " has been defeated");
+                JOptionPane.showMessageDialog(null, name + " has been defeated\nYou got " + goldGiven + " coins");
                 Start.player.addCoins(goldGiven);
                 Start.player.addKill(encounter);
                 if (name.equals("Dragon")){

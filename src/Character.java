@@ -303,6 +303,18 @@ public class Character {
         }
     }
 
+    public void defend(int attackStrength){
+        if (attackStrength - armorRating <= 0){
+            JOptionPane.showMessageDialog(null, "You took 0 damage");
+        }else {
+            hitPoints = (hitPoints > (attackStrength - armorRating)) ? hitPoints - (attackStrength - armorRating) : 0;
+            JOptionPane.showMessageDialog(null, "You took " + (attackStrength - armorRating) + " damage");
+            if (hitPoints <= 0) {
+                Score.End();
+            }
+        }
+    }
+
     public int getAttackStrength(){
         return attackStrength;
     }
