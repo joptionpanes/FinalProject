@@ -12,8 +12,8 @@ public class Score {
 
         final int MAX_SCORE = 10000;
         int score = 0;
-        Enemys enemys = new Enemys();
-        score += (enemys.enemiesKilled() * 10);
+        Enemies enemys = new Enemies();
+        score += (Start.player.enemiesKilled() * 10);
         score += Start.player.getCoins();
         if(score > MAX_SCORE){
             score = MAX_SCORE;
@@ -23,7 +23,8 @@ public class Score {
             JOptionPane.showMessageDialog(null, "Congrats on beating Dustin the dragon\n here is your score: " + score);
         }
         else
-            JOptionPane.showMessageDialog(null, "You died :(\nhere is your score: " + score);
-
+            JOptionPane.showMessageDialog(null, "You died :(\nScore: " + score);
+        Start.player.save();
+        System.exit(5);
     }
 }

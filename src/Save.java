@@ -8,20 +8,8 @@ public class Save {
 
 
     public static void saveToFile(Object[][][] details){
-        Object[][][] testSave = {
-                {
-                        {"Name", 10}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {} //inventory
-                },
-                {
-                        {"Item Name", 10}, {}, {}, {} //armor
-                },
-                {
-                        {10, 11}, {143}, {1} //current x/y pos, score, class
-                },
-
-        };
-        JFileChooser selectedFile = new JFileChooser(saveLocation); //save dialog opens in saves folder
-        String sF = selectedFile.getCurrentDirectory().toString();
+        JFileChooser selectFile = new JFileChooser(saveLocation); //save dialog opens in saves folder
+        String sF = selectFile.getCurrentDirectory().toString();
         File saveFile = new File(sF + "\\save"); //saveFile = save file location
         try { //tries saving file
             saveFile.createNewFile();
@@ -30,25 +18,32 @@ public class Save {
         }
         try { //tries writing to file
             ObjectOutputStream os = new ObjectOutputStream(new FileOutputStream(saveFile));
-            os.writeObject(testSave); //insert name of var to write here
+            os.writeObject(details); //insert name of var to write here
         } catch (IOException e) {
             JOptionPane.showMessageDialog(null, e, "Exception", JOptionPane.ERROR_MESSAGE);
         }
     }
     public static Object[][][] loadFromFile(){
-        JFileChooser selectedFile = new JFileChooser(saveLocation); //load dialog opens in saves folder
-        selectedFile.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
-        if (selectedFile.showOpenDialog(null) == JFileChooser.APPROVE_OPTION) { //if user selects open
-            String sF = selectedFile.getCurrentDirectory().toString();
-            File saveFile = new File(sF + "\\save"); //saveFile = save file location
-            try { //tries reading and returning file as Object[][][]
-                ObjectInputStream is = new ObjectInputStream(new FileInputStream(saveFile));
-                return (Object[][][])is.readObject();
-            } catch (IOException | ClassNotFoundException e) {
-                JOptionPane.showMessageDialog(null, e, "Exception", JOptionPane.ERROR_MESSAGE);
+        JFileChooser selectFile = new JFileChooser(saveLocation); //load dialog opens in saves folder
+        selectFile.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+            if (selectFile.showOpenDialog(null) == JFileChooser.APPROVE_OPTION) { //only continue if open is selected
+                try {
+                    String sF = selectFile.getSelectedFile().toString();
+                    File file = new File(sF);
+                    setSaveLocation(file);
+                    setMapLocation();
+                    File saveFile = new File(sF + "\\save"); //saveFile = save file location
+                    try { //tries reading and returning file as Object[][][]
+                        ObjectInputStream is = new ObjectInputStream(new FileInputStream(saveFile));
+                        return (Object[][][]) is.readObject();
+                    } catch (IOException | ClassNotFoundException e) {
+                        JOptionPane.showMessageDialog(null, e, "Exception ", JOptionPane.ERROR_MESSAGE);
+                    }
+                } catch (NullPointerException e) {
+                    System.out.println("Loading cancelled: " + e);
+                }
             }
-        }
-        JOptionPane.showMessageDialog(null, "Error, empty file selected", "Error", JOptionPane.ERROR_MESSAGE);
+        System.out.println("Error, user probably cancelled.");
         return null;
     }
     public static String getSaveLocation(){
@@ -65,25 +60,13 @@ public class Save {
         mapLocation = saveLocation + "\\map";
         System.out.println(mapLocation + " is location for map");
     }
+
     public static String getMapLocation(){
         return mapLocation;
     }
-    public static void setMapAtPos(int x, int y, String s){
-        File map = new File(mapLocation + "\\x" + x + "y" + y);
-        try { //tries creating file
-            map.createNewFile();
-        }catch (IOException e){
-            System.out.println("Exception in creating map file:\n" + e);
-        }
-        try { //tries writing to file
-            ObjectOutputStream os = new ObjectOutputStream(new FileOutputStream(map));
-                os.writeObject(s); //insert name of var to write here
-        } catch (IOException e) {
-            JOptionPane.showMessageDialog(null, e, "Exception", JOptionPane.ERROR_MESSAGE);
-        }
-    }
+
     public static void setMapAtPos(int x, int y, String s, Object[] cityDetails){
-        Object[] city = {s,cityDetails};
+        Object[][] city = {{s}, cityDetails};
         File map = new File(mapLocation + "\\x" + x + "y" + y);
         try { //tries creating file
             map.createNewFile();
@@ -94,18 +77,19 @@ public class Save {
             ObjectOutputStream os = new ObjectOutputStream(new FileOutputStream(map));
             os.writeObject(city); //insert name of var to write here
         } catch (IOException e) {
-            JOptionPane.showMessageDialog(null, e, "Exception", JOptionPane.ERROR_MESSAGE);
+            System.out.println("Exception: " + e);
         }
     }
-    public static String getMapAtPos(int x, int y){
+
+    public static Object[][] getMapAtPos(int x, int y){
         File map = new File(mapLocation + "\\x" + x + "y" + y);
         try { //tries reading and returning file as Object[]
             ObjectInputStream is = new ObjectInputStream(new FileInputStream(map));
-            return (String)is.readObject();
+            return (Object[][])is.readObject();
         } catch (IOException | ClassNotFoundException e) {
-            JOptionPane.showMessageDialog(null, e, "Exception", JOptionPane.ERROR_MESSAGE);
+            System.out.println("Exception: " + e);
         }
-        return "NULL";
+        return null;
     }
 
 }

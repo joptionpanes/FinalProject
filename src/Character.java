@@ -1,54 +1,97 @@
 import javax.swing.*;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 public class Character {
 
+    private String[] classes = {"Swordsman", "Archer", "Mage"};
     private int playerClass; //Classes 0-2, 0 = swordsman, 1 = archer, 2 = mage
     private int coins;
-    private int dmg; // needs to be set  i don't like your arrays so you do it
-    private int hitPoint = 100;
-    private int maxHp = hitPoint;
-    private int armorRating; // needs to be set  i don't like your arrays so you do it
-    private static Object[][] inventory = new Object[20][2]; //[20 inv slots.] [Name, number]
+    private int attackStrength;
+    private int hitPoints;
+    private int maxHp;
+    private int armorRating;
+    private int level;
+    private int[] killCounters = {0, 0, 0, 0, 0, 0};
+    private int[] activeQuest = {-1, 0, 0, 0, 0, 0};
+    //enemy type (-1 means no quest), amnt to kill, reward, start amount, city x, city y
+    private Object[][] inventory = new Object[20][2]; //[20 inv slots.] [Name, number]
     private Object[][] armor = new Object[4][2]; //[4 armor slots] [Name, protection]
-    private Object[] weapon = new Object[2]; //[Name, damage]
-    //armor names should be structured like: Material (Iron), Piece (Helmet), Armor
+    private Object[] weapon; //[Name, damage]
+    //armor names should be structured like: Material, Piece. EX: Iron Boots
+    //Following vars are naming schemes
     private String[] armorPieces = {"Helmet", "Chestplate", "Leggings", "Boots"}; //4 armor pieces
     private String[] weapons = {"Sword", "Bow", "Wand"};
-    private Object[] defaultEmpty = {"EMPTY", 0};
+    private final Object[] DEFAULT_EMPTY = {"EMPTY", 0};
 
 
     public Character(){ //defaults
         playerClass = 0;
-        coins = 0;
+        coins = 10;
+        attackStrength = 1;
+        hitPoints = 100;
+        maxHp = hitPoints;
+        armorRating = 0;
+        level = 0;
         for (int i = 0; i < inventory.length; i++) { //inventory
-            inventory[i] = defaultEmpty;
+            inventory[i] = DEFAULT_EMPTY;
         }
         for (int i = 0; i < armor.length; i++){
-            armor[i] = defaultEmpty;
+            armor[i] = DEFAULT_EMPTY;
         }
+        weapon = DEFAULT_EMPTY;
     }
-
 
     public void setPlayerClass(int c){
         playerClass = c;
+        System.out.println("Class changed to " + c + ": " + classes[c]);
         if (c == 0){
-            addInventory("Basic Shortsword", 5);
+            addInventory("Basic Sword", 2);
         }else if (c == 1){
-            addInventory("Basic Shortbow", 5);
+            addInventory("Basic Bow", 2);
         }else if (c == 2){
-            addInventory("Basic Wand", 5);
+            addInventory("Basic Wand", 2);
         }else
             System.out.println("Error when selecting class. Does not exist!");
     }
-    public void addCoins(int c){
-        coins = coins + c;
+
+    /**
+     * @param q {enemy type (-1 means no quest), amnt to kill, reward, start amount, city loc x, city loc y}
+     */
+    public void setActiveQuest(int[] q){
+        activeQuest = q;
     }
+
+    public boolean activeQuest(){
+        return activeQuest[0] != -1; //return true if quest is in progress
+    }
+
+    public int[] getActiveQuest(){
+        return activeQuest;
+    }
+
+    public String[] getClasses(){
+        return classes;
+    }
+
+    public int getLevel(){
+        return level;
+    }
+
+    public void addCoins(int c){
+        coins += c;
+        System.out.println(c + " coins added. Total: " + coins);
+    }
+
     public boolean addInventory(String name, int number){
         boolean itemPlaced = false;
         for (int i = 0; i < inventory.length; i++){ //go thru all inventory items
             if (!itemPlaced) {
-                if (inventory[i][0].equals(name) && !inventory[i][0].toString().toLowerCase().contains("armor")) {
+                String item = inventory[i][0].toString();
+                if (item.equals(name) && !item.contains(armorPieces[0]) && !item.contains(armorPieces[1]) &&
+                        !item.contains(armorPieces[2]) && !item.contains(armorPieces[3]) &&
+                        !item.contains(weapons[0]) && !item.contains(weapons[1]) && !item.contains(weapons[2])
+                        && !item.contains(weapons[3])) {
                     //if the item at i slot is the same as the one being added, and does not contain armor
                     int num2 = Integer.parseInt(String.valueOf(inventory[i][1])); //current number of items in inv
                     Object[] inventoryItem = {name, number + num2}; //add them together and
@@ -63,14 +106,15 @@ public class Character {
         }
         return itemPlaced;
     }
-    public Object[] equip(String name, int prot){
 
-        Object[] prev = defaultEmpty;
+    public Object[] equip(String name, int value){
+
+        Object[] prev = DEFAULT_EMPTY;
 
         for (int i = 0; i < armor.length; i++){
             if (name.contains(armorPieces[i])){ //checks name of item to put in correct slot
                 prev = armor[i]; //saves item in that slot so it can be returned to inv
-                Object[] curr = {name, prot};
+                Object[] curr = {name, value}; //current
                 armor[i] = curr;
                 System.out.println(name + " added to " + armorPieces[i]);
                 System.out.println(getArmorString());
@@ -83,9 +127,15 @@ public class Character {
         }
         if (name.contains(weapons[0])||name.contains(weapons[1])||name.contains(weapons[2])){ //checks if it is a weapon
             prev = weapon; //saves item in that slot so it can be returned to inv
-            Object[] curr = {name, prot};
+            Object[] curr = {name, value}; //current
             weapon = curr;
-            dmg = prot;
+            if (name.contains(weapons[playerClass])){
+                attackStrength = (int)(value * 1.5);
+                System.out.println("Equipped weapon base: " + value + "\nWith class bonus: " + attackStrength);
+            }
+            else {
+                attackStrength = value;
+            }
             System.out.println(name + " added to weapon slot");
             System.out.println(weapon[0].toString() + " [" + weapon[1].toString() + "]");
         }
@@ -100,12 +150,18 @@ public class Character {
         return coins;
     }
 
-    public static Object[][] getInventory(){
+    public Object[][] getInventory(){
         return inventory;
     }
+
+    public boolean getInvStatus(){
+        return (int)inventory[19][1] == 0; //return false if full
+    }
+
     public Object[][] getArmor(){
         return armor;
     }
+
     public String getInvString(){
         StringBuilder inv = new StringBuilder();
         int i = 0;
@@ -130,6 +186,7 @@ public class Character {
         }
         return inv.toString();
     }
+
     public String getArmorString(){
         StringBuilder arm = new StringBuilder();
         int i = 0;
@@ -147,6 +204,15 @@ public class Character {
         }
         return arm.toString();
     }
+
+    public int getMaxHp(){
+        return maxHp;
+    }
+
+    public int getHitPoints(){
+        return hitPoints;
+    }
+
     public ArrayList<Object[]> getEquipables(){
         ArrayList<Object[]> equipables = new ArrayList<>();
         for (Object[] i : inventory){
@@ -159,54 +225,197 @@ public class Character {
         }
         return equipables; //equ[3]
     }
+
+    public ArrayList<Object[]> getAllInv(){
+        ArrayList<Object[]> inv = new ArrayList<>();
+        for (Object[] i : inventory){
+            if (!Arrays.equals(i, DEFAULT_EMPTY)) {
+                inv.add(i);
+            }
+        }
+        return inv;
+    }
+
     public boolean displayInv(){
         String inv = getInvString();
-        String[] options = {"Close", "Equip"};
+        String[] options = {"Close", "Equip", "Drop"};
         int choice = JOptionPane.showOptionDialog(null, inv, "Inventory", JOptionPane.YES_NO_CANCEL_OPTION,
                 JOptionPane.PLAIN_MESSAGE, null, options, null);
-        if (choice == 1){
-            ArrayList<Object[]> equipables = getEquipables();
-            boolean acceptableValue = false;
-            do{
-                try {
-                    int equipItem = Integer.parseInt(JOptionPane.showInputDialog(null,
-                            "Type the number corresponding to the item you wish to equip:\n" + convert(equipables)));
-                    equip(equipables.get(equipItem)[0].toString(), (int)equipables.get(equipItem)[1]);
-                    acceptableValue = true;
-                }catch(NumberFormatException|IndexOutOfBoundsException e){
-                    System.out.println(e);
+        if (choice == 1){ //equip
+            ArrayList<Object[]> equipables = getEquipables(); //get all equipable items
+            Object[] eq = listToObject(equipables); //convert to object array
+            try {
+                String equipItem = JOptionPane.showInputDialog(null, "Choose the item you wish to equip:", "Equip",
+                        JOptionPane.QUESTION_MESSAGE, null, eq, null).toString();
+                boolean found = false;
+                int eqNum = 0;
+                while (!found) { //until item is found,
+                    if (equipItem.equals(eq[eqNum])){ //if selected is same as current item in object array
+                        found = true; //item location is found
+                    } else {
+                        eqNum++;
+                    }
                 }
-
-            }while(!acceptableValue);
-            return true;
+                Object[] prev;
+                prev = equip(equipables.get(eqNum)[0].toString(), (int)equipables.get(eqNum)[1]); //equip selected item
+                Object[] item = {equipables.get(eqNum)[0].toString(), equipables.get(eqNum)[1]};
+                removeFromInv(item);
+                addInventory(prev[0].toString(), (int)prev[1]);
+                return true; //return true if item is equipped
+            } catch (NullPointerException e){
+                System.out.println("Equipping cancelled: " + e);
+                return false;
+            }
+        } else if (choice == 2) { //drop
+            Object[] options2 = listToObject(getAllInv());
+            try {
+                String dropChoice = JOptionPane.showInputDialog(null, "Choose the item you wish to drop:\n" +
+                                "This cannot be undone, and the item cannot be retrieved!", "Drop",
+                        JOptionPane.QUESTION_MESSAGE, null, options2, null).toString();
+                boolean found = false;
+                int eqNum = 0;
+                while (!found) { //until item is found,
+                    if (dropChoice.equals(options2[eqNum])){ //if selected is same as current item in object array
+                        found = true; //item location is found
+                    } else {
+                        eqNum++;
+                    }
+                }
+                Object[] item = {inventory[eqNum][0].toString(), inventory[eqNum][1]};
+                removeFromInv(item);
+            } catch (NullPointerException e){
+                System.out.println("Drop cancelled: " + e);
+                return false;
+            }
         }
         return false;
     }
-    public void defend(Enemys monster){
+
+    public void defend(Enemies monster){
         int attackStrength = monster.attack();
         if (attackStrength - armorRating <= 0){
-            JOptionPane.showMessageDialog(null, "You took 0 dmg");
+            JOptionPane.showMessageDialog(null, "You took 0 damage");
         }else {
-            hitPoint = (hitPoint > (attackStrength - armorRating)) ? hitPoint - (attackStrength - armorRating) : 0;
-            JOptionPane.showMessageDialog(null, "You took " + (attackStrength - armorRating) + " dmg");
-            if (hitPoint <= 0) {
+            hitPoints = (hitPoints > (attackStrength - armorRating)) ? hitPoints - (attackStrength - armorRating) : 0;
+            JOptionPane.showMessageDialog(null, "You took " + (attackStrength - armorRating) + " damage");
+            if (hitPoints <= 0) {
                 Score.End();
             }
         }
     }
-    public int attack(){
-        return dmg;
+
+    public int getAttackStrength(){
+        return attackStrength;
     }
+
     public boolean isAlive(){
-        return hitPoint > 0;
+        return hitPoints > 0;
     }
+
     public String convert(ArrayList<Object[]> a){
         StringBuilder s = new StringBuilder();
         int i = 0;
         for (Object[] n : a){
             s.append(i + ": " + n[0].toString() + " [" + n[1].toString() + "], ");
             i++;
+            if (i % 5 == 0){
+                s.append("\n");
+            }
         }
         return s.toString();
+    }
+
+    public Object[] listToObject (ArrayList<Object[]> a){
+        Object[] r = new Object[a.size()];
+        int i = 0;
+        for (Object[] n : a){
+            r[i] = n[0] + " [" + n[1] + "]";
+            i++;
+        }
+        return r;
+    }
+
+    public void addMaxHp(int a){
+        maxHp += a;
+    }
+
+    public void addHp(int a){
+        hitPoints = hitPoints + a;
+        if (hitPoints > maxHp){
+            hitPoints = maxHp;
+        }
+    }
+
+    public void save(){
+        Object[][][] saveValues = {
+                        inventory, armor, {weapon},
+                {
+                        {Movement.getX(), Movement.getY()}, {playerClass}, {coins}, {hitPoints, maxHp}
+                },
+
+        };
+        Save.saveToFile(saveValues);
+        System.out.println("Saved");
+    }
+
+    public boolean load(){
+        try {
+            Object[][][] saveValues = Save.loadFromFile();
+            inventory = saveValues[0];
+            armor = saveValues[1];
+            weapon = saveValues[2][0];
+            Movement.setX((int) saveValues[3][0][0]);
+            Movement.setY((int) saveValues[3][0][1]);
+            playerClass = (int) saveValues[3][1][0];
+            coins = (int) saveValues[3][2][0];
+            hitPoints = (int) saveValues[3][3][0];
+            maxHp = (int) saveValues[3][3][1];
+            System.out.println("Loaded");
+            return true;
+        } catch (NullPointerException e){
+            System.out.println("User cancelled?: " + e);
+            return false;
+        }
+    }
+
+    public void removeCoins(int c){
+        coins -= c;
+        System.out.println(c + " coins removed. ");
+    }
+
+    public void removeFromInv(Object[] item){
+        boolean found = false;
+        int eqNum = 0;
+        while (!found) { //until item is found,
+            try {
+                if (Arrays.equals(item, inventory[eqNum])) { //if item to be removed is same as current item in inv
+                    found = true; //item location is found
+                } else {
+                    eqNum++;
+                }
+            } catch (NullPointerException e){
+                System.out.println("User selected cancel: " + e);
+            }
+        }
+        ArrayList<Object[]> list = new ArrayList<>(Arrays.asList(inventory));
+        list.remove(eqNum);
+        list.add(DEFAULT_EMPTY);
+        inventory = list.toArray(new Object[][]{});
+    }
+
+    public int enemiesKilled(){
+        int total = 0;
+        for(int k = 0; k < killCounters.length; k++){
+            total += killCounters[k];
+        }
+        return total;
+    }
+
+    public void addKill(int e){
+        killCounters[e] += 1;
+    }
+
+    public int getKills(int e){
+        return killCounters[e];
     }
 }
