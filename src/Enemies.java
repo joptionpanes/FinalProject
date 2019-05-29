@@ -30,12 +30,11 @@ public class Enemies {
     private static String[] names = {"Slime","Goblin","Undead","Orc","Giant"};
 
     public void enemyGenerator() {
-        encounter = (int) (Math.random() * ((5) + 1));
         int level = Start.player.getLevel();
-        if (level > 4){
-            level = 4;
+        if (level > 5){
+            level = 5;
         }
-        int encounter = (int) (Math.random() * ((level) + 1));
+        encounter = (int) (Math.random() * ((level) + 1));
         maxHitPoints = maxHitPointsArray[encounter];
         hitPoints = maxHitPoints;
         attack = attackArray[encounter];

@@ -220,7 +220,7 @@ public class Encounters {
                         String questString = "Kill " + quest[1] + " " + quest[0] + "s for " + quest[2] + " coins";
                         int[] playerQuest = Start.player.getActiveQuest();
                         if (playerQuest[4] == Movement.getX() && playerQuest[5] == Movement.getY()) {
-                            if (Start.player.getKills(playerQuest[0]) - playerQuest[3] == playerQuest[1]) {
+                            if (Start.player.getKills(playerQuest[0]) - playerQuest[3] >= playerQuest[1]) {
                                 int claim = JOptionPane.showConfirmDialog(null, "Claim reward? (" + questString + ")", "Quest",
                                         JOptionPane.YES_NO_OPTION);
                                 if (claim == 0) {
@@ -281,7 +281,23 @@ public class Encounters {
                         int forge = JOptionPane.showOptionDialog(null, "What item would you like to forge?", "Forge",
                                 JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE, null, forgeOptions, null);
                         if (forge == 0) {
-                            //getEquipped items
+                            Object[][] armor = Start.player.getArmor();
+                            Object[] weapon = Start.player.getWeapon();
+                            ArrayList<String> equipped = new ArrayList<>();
+                            for (Object[] o : armor){
+                                if ((int)o[1] != 0){
+                                    equipped.add(o[0] + " [" + o[1] + "]");
+                                }
+                            }
+                            if ((int)weapon[1] != 0){
+                                equipped.add(weapon[0] + " [" + weapon[1] + "]");
+                            }
+                            Object[] equipObject = equipped.toArray();
+                            int upgraded = JOptionPane.showOptionDialog(null, "Choose the item to upgrade", "Upgrade",
+                                    JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE, null, equipObject, null);
+                            for (int i = 0; i < armor.length + weapon.length; i++){
+                                //if (equipped[upgraded] == )
+                            }
                         } else if (forge == 1) {
                             //inventory
                         }

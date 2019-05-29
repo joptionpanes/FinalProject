@@ -2,7 +2,7 @@ import javax.swing.*;
 import java.io.*;
 
 public class Save {
-    private static String gameName = "gameName";
+    private static String gameName = "Journeyman's Quest";
     private static String saveLocation = "C:\\ProgramData\\" + gameName + "\\saves";
     private static String mapLocation = saveLocation + "\\map";
 
