@@ -72,9 +72,15 @@ public class Encounters {
                 int random = (int)(Math.random() * 3);
                 int attack = (int)(Math.random() * (10 * shopLvl)) + 5;
                 int cost = (int)((Math.random() * (shopLvl * 10)) + attack) - discount;
+                if (cost <= 0){
+                    cost = attack - discount;
+                }
+                if (cost <= 0){
+                    cost = attack / 2;
+                }
                 Object[] temp = {weaponTypes[random], attack, cost};
                 shop[i] = temp;
-            }else if (itemDecider < 13){ //choose catalyst
+            } else if (itemDecider < 13){ //choose catalyst
                 discount = (int)(Math.random() * (3 * (shopLvl - 2))) + 10;
                 int random = (int)(Math.random() * 3);
                 int potency;
@@ -101,11 +107,13 @@ public class Encounters {
         }
         int choice;
         do {
-            String[] options1 = {"Shop", "Continue"};
+            String[] options1 = {"Shop", "Inventory", "Continue"};
             choice = JOptionPane.showOptionDialog(null, "You've met a wandering traveler!", "Traveler",
                     JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE, null, options1, null);
             if (choice == 0) {
                 shop = shopDialog(shop);
+            } else if (choice == 1) {
+                Start.player.displayInv();
             }
         } while (choice == 0);
     }
@@ -120,7 +128,7 @@ public class Encounters {
         ArrayList<String> options = new ArrayList<>();
         boolean generated = false;
         if (genInn > 1){
-            options.add("Stay at inn; Cost: " + innCost);
+            options.add("Stay at inn");
             generated = true;
         }
         if (genShop > 3){
@@ -134,6 +142,7 @@ public class Encounters {
             options.add("See quest");
             generated = true;
         }
+        options.add("Inventory");
         options.add("Continue");
         if (!generated){
             System.out.println("Empty city");
@@ -173,73 +182,94 @@ public class Encounters {
             } else {
                 uCString = opt[userChoice].toString();
             }
-            if (uCString.equals("Stay at inn; Cost: " + innCost)) {
-                int random = (int) (Math.random() * (Start.player.getMaxHp()
-                        - Start.player.getHitPoints())) + 20;
-                if (Start.player.getCoins() < innCost){
-                    JOptionPane.showMessageDialog(null, "You don't have enough coins to stay at the inn");
-                } else {
-                    Start.player.removeCoins(innCost);
-                    Start.player.addHp(random);
-                }
-            } else if (uCString.equals("Shop")) {
-                shop = shopDialog(shop);
-            } else if (uCString.equals("See quest")) {
-                int[] questDeets = {(int)quest[3], (int)quest[1], (int)quest[2],
-                        Start.player.getKills((int)quest[3]), Movement.getX(), Movement.getY()};
-                //enemy type, amnt to kill, reward, start amount, city x, city y
-                String questString = "Kill " + quest[1] + " " + quest[0] + "s for " + quest[2] + " coins";
-                int[] playerQuest = Start.player.getActiveQuest();
-                if (playerQuest[4] == Movement.getX() && playerQuest[5] == Movement.getY()){
-                    int claim = JOptionPane.showConfirmDialog(null, "Claim reward? (" + questString + ")", "Quest",
+            switch (uCString) {
+                case "Stay at inn":
+                    int sure = JOptionPane.showConfirmDialog(null, "Are you sure? This will cost " + innCost +
+                            " coins\nYou have " + Start.player.getCoins() + " coins; "
+                            + Start.player.getHitPoints() + "/" + Start.player.getMaxHp() + " hp", "Stay?",
                             JOptionPane.YES_NO_OPTION);
-                    if (claim == 0){
+                    if (sure == 0) {
+                        if (Start.player.getMaxHp() == Start.player.getHitPoints()){
+                            JOptionPane.showMessageDialog(null, "Ahem, you have full health, there's nothing to heal...");
+                        } else {
+                            if (Start.player.getCoins() < innCost) {
+                                JOptionPane.showMessageDialog(null, "You don't have enough coins to stay at the inn");
+                            } else {
+                                int random = (int) (Math.random() * (Start.player.getMaxHp()
+                                        - Start.player.getHitPoints())) + 20;
+                                Start.player.removeCoins(innCost);
+                                Start.player.addHp(random);
+                                JOptionPane.showMessageDialog(null, "Healed " + random + " hp!");
+                            }
+                        }
+                    }
+                    break;
+                case "Shop":
+                    shop = shopDialog(shop);
+                    break;
+                case "See quest":
+                    int[] questDeets = {(int)quest[3], (int)quest[1], (int)quest[2],
+                            Start.player.getKills((int)quest[3]), Movement.getX(), Movement.getY()};
+                    //enemy type, amnt to kill, reward, start amount, city x, city y
+                    String questString = "Kill " + quest[1] + " " + quest[0] + "s for " + quest[2] + " coins";
+                    int[] playerQuest = Start.player.getActiveQuest();
+                    if (playerQuest[4] == Movement.getX() && playerQuest[5] == Movement.getY()){
                         if (Start.player.getKills(playerQuest[0]) - playerQuest[3] == playerQuest[1]){
-                            JOptionPane.showMessageDialog(null, "You have claimed the quest reward!\n" +
-                                    "Received " + playerQuest[2] + " coins");
-                            Start.player.addCoins(playerQuest[2]);
-                            int[] defaultQuest = {-1, 0, 0, 0, 0, 0};
-                            Start.player.setActiveQuest(defaultQuest);
-                        }
-                    }
-                } else {
-                    int acceptQuest = JOptionPane.showConfirmDialog(null, "The offered quest is:\n" + questString +
-                                    "\nAccept for 10 coins? You have " + Start.player.getCoins(), "Quest",
-                            JOptionPane.YES_NO_OPTION);
-                    if (acceptQuest == 0) {
-                        if (Start.player.getCoins() < 10) {
-                            JOptionPane.showMessageDialog(null, "You don't have enough coins to accept the quest!");
-                        } else if (Start.player.activeQuest()) {
-                            JOptionPane.showMessageDialog(null, "You already have an active quest!");
+                            int claim = JOptionPane.showConfirmDialog(null, "Claim reward? (" + questString + ")", "Quest",
+                                JOptionPane.YES_NO_OPTION);
+                            if (claim == 0){
+                                JOptionPane.showMessageDialog(null, "You have claimed the quest reward!\n" +
+                                        "Received " + playerQuest[2] + " coins");
+                                Start.player.addCoins(playerQuest[2]);
+                                int[] defaultQuest = {-1, 0, 0, 0, 0, 0};
+                                Start.player.setActiveQuest(defaultQuest);
+                            }
                         } else {
-                            JOptionPane.showMessageDialog(null, "Quest accepted!");
-                            Start.player.removeCoins(20);
-                            Start.player.setActiveQuest(questDeets);
+                            JOptionPane.showMessageDialog(null, "Quest progress:\n" +
+                                    "Killed: " + Start.player.getKills(playerQuest[0]) + "/" + playerQuest[1]);
+                        }
+                    } else {
+                        int acceptQuest = JOptionPane.showConfirmDialog(null, "The offered quest is:\n" + questString +
+                                        "\nAccept for 10 coins? You have " + Start.player.getCoins(), "Quest",
+                                JOptionPane.YES_NO_OPTION);
+                        if (acceptQuest == 0) {
+                            if (Start.player.getCoins() < 10) {
+                                JOptionPane.showMessageDialog(null, "You don't have enough coins to accept the quest!");
+                            } else if (Start.player.activeQuest()) {
+                                JOptionPane.showMessageDialog(null, "You already have an active quest!");
+                            } else {
+                                JOptionPane.showMessageDialog(null, "Quest accepted!");
+                                Start.player.removeCoins(10);
+                                Start.player.setActiveQuest(questDeets);
+                            }
                         }
                     }
-                }
-            } else if (uCString.equals("Sell")){
-                Object[] sellItems = Start.player.listToObject(Start.player.getAllInv());
-                try {
-                    String sellChoice = JOptionPane.showInputDialog(null, "Choose the item you wish to sell:\n" +
-                                    "This cannot be undone, and the item cannot be bought again!", "Sell",
-                            JOptionPane.QUESTION_MESSAGE, null, sellItems, null).toString();
-                    boolean found = false;
-                    int eqNum = 0;
-                    while (!found) { //until item is found,
-                        if (sellChoice.equals(sellItems[eqNum])){ //if selected is same as current item in object array
-                            found = true; //item location is found
-                        } else {
-                            eqNum++;
+                    break;
+                case "Sell":
+                    Object[] sellItems = Start.player.listToObject(Start.player.getAllInv());
+                    try {
+                        String sellChoice = JOptionPane.showInputDialog(null, "Choose the item you wish to sell:\n" +
+                                        "This cannot be undone, and the item cannot be bought again!", "Sell",
+                                JOptionPane.QUESTION_MESSAGE, null, sellItems, null).toString();
+                        boolean found = false;
+                        int eqNum = 0;
+                        while (!found) { //until item is found,
+                            if (sellChoice.equals(sellItems[eqNum])){ //if selected is same as current item in object array
+                                found = true; //item location is found
+                            } else {
+                                eqNum++;
+                            }
                         }
+                        Object[][] inventory = Start.player.getInventory();
+                        Object[] item = {inventory[eqNum][0].toString(), inventory[eqNum][1]};
+                        Start.player.addCoins((int)(Math.random() * (int)inventory[eqNum][1]) + (int)inventory[eqNum][1]);
+                        Start.player.removeFromInv(item);
+                    } catch (NullPointerException e){
+                        System.out.println("Sell cancelled: " + e);
                     }
-                    Object[][] inventory = Start.player.getInventory();
-                    Object[] item = {inventory[eqNum][0].toString(), inventory[eqNum][1]};
-                    Start.player.addCoins((int)(Math.random() * (int)inventory[eqNum][1]) + (int)inventory[eqNum][1]);
-                    Start.player.removeFromInv(item);
-                } catch (NullPointerException e){
-                    System.out.println("Sell cancelled: " + e);
-                }
+                    break;
+                case "Inventory":
+                    Start.player.displayInv();
             }
         } while (!uCString.equals("Continue"));
         Object[] cityDetails2 = {shop, quest, innCost, options};
@@ -247,7 +277,15 @@ public class Encounters {
     }
 
     public void generateBattle(){
-        int amount = (int)(Math.random() * Start.player.getLevel()) + 1;
+        int level = Start.player.getLevel();
+        if (level > 5) {
+            level = 5;
+        }
+        int amount = (int)(Math.random() * level) + 1;
+        if (amount == 0){
+            System.out.println("Amount of enemy encounters = 0... That shouldn't happen");
+            amount = 1;
+        }
         for (int i = 0; i < amount; i++) {
             Enemies enemy = new Enemies();
             enemy.enemyGenerator();
@@ -315,6 +353,28 @@ public class Encounters {
             Object[][] newShop = list.toArray(new Object[][]{}); //turn back into object array
             shopDialog(newShop); //new dialog with new shop
             return newShop;
+        }
+    }
+
+    public void generateBossBattle(){
+        Enemies dragon = new Enemies();
+        dragon.newDragon();
+
+        while (Start.player.isAlive() && dragon.isAlive()) {
+            String[] battleOptions = {"Attack", "Items"};
+            String message = "Fighting " + dragon.MonName() + ". " + dragon.getStatus() +
+                    "\nPlayer hp: " + Start.player.getHitPoints();
+            int result = JOptionPane.showOptionDialog(null, message, "Choose what to do",
+                    JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE, null, battleOptions, null);
+            boolean itemUsed = true;
+            if (result == 0) {
+                dragon.defend();
+            } else {
+                itemUsed = Start.player.displayInv();
+            }
+            if (dragon.isAlive() && itemUsed) {
+                Start.player.defend(dragon);
+            }
         }
     }
 }
