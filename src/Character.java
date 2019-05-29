@@ -257,7 +257,7 @@ public class Character {
     }
 
     public boolean displayInv(){
-        String inv = getInvString();
+        String inv = getInvString() + "\n\n" + getArmorString();
         String[] options = {"Close", "Equip", "Drop"};
         int choice = JOptionPane.showOptionDialog(null, inv, "Inventory", JOptionPane.YES_NO_CANCEL_OPTION,
                 JOptionPane.PLAIN_MESSAGE, null, options, null);
@@ -436,5 +436,9 @@ public class Character {
 
     public int getKills(int e){
         return killCounters[e];
+    }
+
+    public Object[] getWeapon(){
+        return weapon;
     }
 }
