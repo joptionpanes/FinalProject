@@ -437,4 +437,8 @@ public class Character {
     public int getKills(int e){
         return killCounters[e];
     }
+
+    public Object[] getWeapon(){
+        return weapon;
+    }
 }
