@@ -61,57 +61,30 @@ public class Movement {
     public static void moveNorth(){
         y += 1;
         System.out.println("Moving North to: " + x + ", " + y);
-        int exists = checkForExisting();
-        if (exists != 0 && exists != 2) {
-            movesBeforeEncounter();
-            moveRand1 = (int) (Math.random() * range) + min;
-            moveRand2 = (int) (Math.random() * range) + min;
-            if (moveRand1 == moveRand2) {
-                encounter();
-            } else
-                Save.setMapAtPos(x, y, "NULL", null);
-        } else if (exists == 2){
-            caveEncounter();
-        }
+        encounterCheck();
     }
 
     public static void moveWest(){
         x -= 1;
         System.out.println("Moving West to: " + x + ", " + y);
-        int exists = checkForExisting();
-        if (exists != 0 && exists != 2) {
-            movesBeforeEncounter();
-            moveRand1 = (int) (Math.random() * range) + min;
-            moveRand2 = (int) (Math.random() * range) + min;
-            if (moveRand1 == moveRand2) {
-                encounter();
-            } else
-                Save.setMapAtPos(x, y, "NULL", null);
-        } else if (exists == 2){
-            caveEncounter();
-        }
+        encounterCheck();
     }
 
     public static void moveEast(){
         x += 1;
         System.out.println("Moving East to: " + x + ", " + y);
-        int exists = checkForExisting();
-        if (exists != 0 && exists != 2) {
-            movesBeforeEncounter();
-            moveRand1 = (int) (Math.random() * range) + min;
-            moveRand2 = (int) (Math.random() * range) + min;
-            if (moveRand1 == moveRand2) {
-                encounter();
-            } else
-                Save.setMapAtPos(x, y, "NULL", null);
-        } else if (exists == 2){
-            caveEncounter();
-        }
+        encounterCheck();
     }
 
     public static void moveSouth(){
         y -= 1;
         System.out.println("Moving South to: " + x + ", " + y);
+        encounterCheck();
+    }
+
+
+    //ENCOUNTER METHODS
+    public static void encounterCheck(){
         int exists = checkForExisting();
         if (exists != 0 && exists != 2) {
             movesBeforeEncounter();
@@ -119,15 +92,18 @@ public class Movement {
             moveRand2 = (int) (Math.random() * range) + min;
             if (moveRand1 == moveRand2) {
                 encounter();
-            } else
+            } else {
                 Save.setMapAtPos(x, y, "NULL", null);
+                if ((int)(Math.random() * 10) == 5){
+                    JOptionPane.showMessageDialog(null, "You found shiny rocks, maybe they could be used for something?");
+                    Start.player.addInventory("Rock", (int)(Math.random() * 3) + 1);
+                }
+            }
         } else if (exists == 2){
             caveEncounter();
         }
     }
 
-
-    //ENCOUNTER METHODS
     public static void movesBeforeEncounter(){
         movesBeforeEncounter++;
         range = max - movesBeforeEncounter + 1;
@@ -135,14 +111,14 @@ public class Movement {
 
     public static void encounter(){
         movesBeforeEncounter = 0; //chances 10 30 60
-        moveRand = (int)(Math.random() * 10) + 1;
+        moveRand = (int)(Math.random() * 100) + 1;
         Encounters encounter = new Encounters();
-        if(moveRand <= 1){
+        if(moveRand <= 8){
             System.out.println("Wander encounter");
             Save.setMapAtPos(x, y, "NULL", null);
             encounter.generateWandererShop();
         }
-        else if((moveRand >= 9) && checkForExisting() == -1){
+        else if((moveRand >= 70) && checkForExisting() == -1){
             System.out.println("City encounter");
             encounter.generateCity();
         }
