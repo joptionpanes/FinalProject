@@ -12,6 +12,8 @@ public class Character {
     private int maxHp;
     private int armorRating;
     private int level;
+    private int defense;
+    private int strength;
     private int[] killCounters = {0, 0, 0, 0, 0, 0};
     private int[] activeQuest = {-1, 0, 0, 0, 0, 0};
     //enemy type (-1 means no quest), amnt to kill, reward, start amount, city x, city y
@@ -78,6 +80,14 @@ public class Character {
         return level;
     }
 
+    public void addStrength(int s){
+        strength += s;
+    }
+
+    public void addDefense(int d){
+        defense += d;
+    }
+
     public void addCoins(int c){
         coins += c;
         System.out.println(c + " coins added. Total: " + coins);
@@ -137,6 +147,17 @@ public class Character {
             }
             System.out.println(name + " added to weapon slot");
             System.out.println(weapon[0].toString() + " [" + weapon[1].toString() + "]");
+        } else if (name.contains("Catalyst")){
+            if (name.contains("Health")){
+                addMaxHp(value);
+                JOptionPane.showMessageDialog(null, "Added " + value + " to max health.");
+            } else if (name.contains("Armor")){
+                addDefense(value);
+                JOptionPane.showMessageDialog(null, "Added " + value + " to base defense.");
+            } else if (name.contains("Strength")){
+                addStrength(value);
+                JOptionPane.showMessageDialog(null, "Added " + value + " to base strength.");
+            }
         }
         return prev; //return the previously worn armor so it isn't deleted and can be put in the inv
     }
@@ -311,19 +332,6 @@ public class Character {
         return hitPoints > 0;
     }
 
-    public String convert(ArrayList<Object[]> a){
-        StringBuilder s = new StringBuilder();
-        int i = 0;
-        for (Object[] n : a){
-            s.append(i + ": " + n[0].toString() + " [" + n[1].toString() + "], ");
-            i++;
-            if (i % 5 == 0){
-                s.append("\n");
-            }
-        }
-        return s.toString();
-    }
-
     public Object[] listToObject (ArrayList<Object[]> a){
         Object[] r = new Object[a.size()];
         int i = 0;
@@ -345,11 +353,16 @@ public class Character {
         }
     }
 
+    public void addLevel(){
+        level++;
+    }
+
     public void save(){
         Object[][][] saveValues = {
                         inventory, armor, {weapon},
                 {
-                        {Movement.getX(), Movement.getY()}, {playerClass}, {coins}, {hitPoints, maxHp}
+                        {Movement.getX(), Movement.getY()}, {playerClass}, {coins}, {hitPoints, maxHp},
+                        {attackStrength, armorRating}, {level}, {killCounters}, {activeQuest}, {defense, strength}
                 },
 
         };
@@ -369,6 +382,13 @@ public class Character {
             coins = (int) saveValues[3][2][0];
             hitPoints = (int) saveValues[3][3][0];
             maxHp = (int) saveValues[3][3][1];
+            attackStrength = (int) saveValues[3][4][0];
+            armorRating = (int) saveValues[3][4][1];
+            level = (int) saveValues[3][5][0];
+            killCounters = (int[])saveValues[3][6][0];
+            activeQuest = (int[]) saveValues[3][7][0];
+            defense = (int) saveValues[3][8][0];
+            strength = (int) saveValues[3][8][1];
             System.out.println("Loaded");
             return true;
         } catch (NullPointerException e){
