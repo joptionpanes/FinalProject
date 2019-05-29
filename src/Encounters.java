@@ -21,7 +21,11 @@ public class Encounters {
     }
 
     public Object[][] generateCityShop(){
-        int shopLvl = (int)(Math.random() * 5) + 1;
+        int level = Start.player.getLevel();
+        if (level > 5){
+            level = 5;
+        }
+        int shopLvl = (int)(Math.random() * level) + 1;
         System.out.println("Shoplvl: "+ shopLvl);
         int amountOfItems = (int) (Math.random() * 5) + 5;
         Object[][] shop = new Object[amountOfItems][3];
@@ -59,7 +63,11 @@ public class Encounters {
     }
 
     public void generateWandererShop(){ //same as city except better items and lower prices
-        int shopLvl = (int)(Math.random() * 5) + 3;
+        int level = Start.player.getLevel();
+        if (level > 5){
+            level = 5;
+        }
+        int shopLvl = (int)(Math.random() * level) + 3;
         System.out.println("Shoplvl: "+ shopLvl);
         int amountOfItems = (int) (Math.random() * 5) + 5;
         Object[][] shop = new Object[amountOfItems][3];
@@ -278,7 +286,8 @@ public class Encounters {
                         Start.player.displayInv();
                     case "Forge":
                         String[] forgeOptions = {"Equipped items", "Inventory", "Cancel"};
-                        int forge = JOptionPane.showOptionDialog(null, "What item would you like to forge?", "Forge",
+                        int forge = JOptionPane.showOptionDialog(null,
+                                "Maybe you can use those strange rocks you found here!", "Forge",
                                 JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE, null, forgeOptions, null);
                         if (forge == 0) {
                             Object[][] armor = Start.player.getArmor();
@@ -295,8 +304,10 @@ public class Encounters {
                             Object[] equipObject = equipped.toArray();
                             int upgraded = JOptionPane.showOptionDialog(null, "Choose the item to upgrade", "Upgrade",
                                     JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE, null, equipObject, null);
-                            for (int i = 0; i < armor.length + weapon.length; i++){
-                                //if (equipped[upgraded] == )
+                            for (int i = 0; i < armor.length; i++){
+                                if (equipObject[upgraded] == weapon[i]){
+                                    //Start.player.equip();
+                                }
                             }
                         } else if (forge == 1) {
                             //inventory

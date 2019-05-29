@@ -90,7 +90,7 @@ public class Character {
 
     public void addCoins(int c){
         coins += c;
-        System.out.println(c + " coins added. Total: " + coins);
+        JOptionPane.showMessageDialog(null, c + " coins added. Total: " + coins);
     }
 
     public boolean addInventory(String name, int number){
@@ -193,7 +193,7 @@ public class Character {
                 inv.replace(inv.length()-2, inv.length(), "."); //replace last two chars "; " with "."
                 return inv.toString();
             }
-            inv.append(s[0] + " (" + s[1] + ")"); //add the item to the string in this format: "itemName (num)"
+            inv.append(s[0] + " [" + s[1] + "]"); //add the item to the string in this format: "itemName (num)"
             ++i;
             if (i < inventory.length){
                 inv.append("; "); //separate each item with "; "
@@ -215,14 +215,22 @@ public class Character {
             if (num.equals("0")) //if the slot is empty
                 arm.append(armorPieces[i] + " slot is empty"); //say the slot is empty
             else
-                arm.append(a[0] + " (" + a[1] + ")"); //add the item to the string in this format: "itemName (prot);"
+                arm.append(a[0] + " [" + a[1] + "]"); //add the item to the string in this format: "itemName (prot);"
             ++i;
-            if (i < inventory.length)
+            if (i < armor.length)
                 arm.append(";\n"); //separate each item with ";" and a new line
-            else if (i == inventory.length)
+            else if (i == armor.length)
                 arm.append("."); //end with "."
         }
         return arm.toString();
+    }
+
+    public String getWeaponString(){
+        if ((int)weapon[1] == 0){
+            return "No weapon equipped";
+        } else {
+            return weapon[0] + " [" + weapon[1] + "]";
+        }
     }
 
     public int getMaxHp(){
@@ -257,7 +265,7 @@ public class Character {
     }
 
     public boolean displayInv(){
-        String inv = getInvString() + "\n\n" + getArmorString();
+        String inv = getInvString() + "\n\n" + getArmorString() + "\n\n" + getWeaponString();
         String[] options = {"Close", "Equip", "Drop"};
         int choice = JOptionPane.showOptionDialog(null, inv, "Inventory", JOptionPane.YES_NO_CANCEL_OPTION,
                 JOptionPane.PLAIN_MESSAGE, null, options, null);
