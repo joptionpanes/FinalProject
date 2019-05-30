@@ -97,14 +97,18 @@ public class Save {
         int centerX = Movement.getX();
         int centerY = Movement.getY();
         final int MAP_SIZE = 5; //from center
-        final String CITY = "۞";
-        final String NOTHING = "☐";
-        final String NOT_GENNED = "⌧";
+        final String CITY = "⊞";
+        final String NOTHING = "⊟";
+        final String NOT_GENNED = "⊠";
+        final String PLAYER = "⊡";
         StringBuilder map = new StringBuilder();
+        map.append("<html><span style='font-size:20px'>");
         for (int j = 0; j < MAP_SIZE * 2 + 1; j++) {
             for (int i = 0; i < MAP_SIZE * 2 + 1; i++) {
                 try {
-                    if (getMapAtPos(centerX - MAP_SIZE + i, centerY - MAP_SIZE + j)[0][0].equals("City")) {
+                    if (i - MAP_SIZE == 0 && j - MAP_SIZE == 0){
+                        map.append(PLAYER);
+                    } else if (getMapAtPos(centerX - MAP_SIZE + i, centerY - MAP_SIZE + j)[0][0].equals("City")) {
                         map.append(CITY);
                     } else if (getMapAtPos(centerX - MAP_SIZE + i, centerY - MAP_SIZE + j)[0][0].equals("NULL")) {
                         map.append(NOTHING);
@@ -114,8 +118,9 @@ public class Save {
                     map.append(NOT_GENNED);
                 }
             }
-            map.append("\n");
+            map.append("<br/>");
         }
+        map.append("</html>");
         return map.toString();
     }
 
@@ -127,6 +132,7 @@ public class Save {
         JToggleButton south = new JToggleButton("Move South");
         JToggleButton east = new JToggleButton("Move East");
         JToggleButton west = new JToggleButton("Move West");
+        north.setSize(100,100);
 
         ButtonGroup movement = new ButtonGroup();
         movement.add(north);
@@ -135,6 +141,7 @@ public class Save {
         movement.add(west);
 
         panel.add(n);
+        panel.add(n);
         panel.add(north);
         panel.add(n);
         panel.add(east);
@@ -142,6 +149,8 @@ public class Save {
         panel.add(south);
         panel.add(n);
         panel.add(west);
+        Object[] options = {"Move Map", "Continue"};
+        JOptionPane.showOptionDialog(null, panel, "Map", JOptionPane.YES_NO_OPTION, JOptionPane.PLAIN_MESSAGE, null, options, null);
     }
 
     public static void initMap(){
