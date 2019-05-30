@@ -1,4 +1,5 @@
 import javax.swing.*;
+import java.awt.*;
 import java.io.*;
 
 public class Save {
@@ -90,6 +91,57 @@ public class Save {
             System.out.println("Exception: " + e);
         }
         return null;
+    }
+
+    public static String getMapString(){
+        int centerX = Movement.getX();
+        int centerY = Movement.getY();
+        final int MAP_SIZE = 5; //from center
+        final String CITY = "۞";
+        final String NOTHING = "☐";
+        final String NOT_GENNED = "⌧";
+        StringBuilder map = new StringBuilder();
+        for (int j = 0; j < MAP_SIZE * 2 + 1; j++) {
+            for (int i = 0; i < MAP_SIZE * 2 + 1; i++) {
+                try {
+                    if (getMapAtPos(centerX - MAP_SIZE + i, centerY - MAP_SIZE + j)[0][0].equals("City")) {
+                        map.append(CITY);
+                    } else if (getMapAtPos(centerX - MAP_SIZE + i, centerY - MAP_SIZE + j)[0][0].equals("NULL")) {
+                        map.append(NOTHING);
+                    }
+                } catch (NullPointerException e) {
+                    System.out.println("Found nothing while drawing map: " + e);
+                    map.append(NOT_GENNED);
+                }
+            }
+            map.append("\n");
+        }
+        return map.toString();
+    }
+
+    public static void displayMap(){
+        JPanel panel = new JPanel(new GridLayout(2, 1));
+        JLabel n = new JLabel("");
+
+        JToggleButton north = new JToggleButton("Move North");
+        JToggleButton south = new JToggleButton("Move South");
+        JToggleButton east = new JToggleButton("Move East");
+        JToggleButton west = new JToggleButton("Move West");
+
+        ButtonGroup movement = new ButtonGroup();
+        movement.add(north);
+        movement.add(east);
+        movement.add(south);
+        movement.add(west);
+
+        panel.add(n);
+        panel.add(north);
+        panel.add(n);
+        panel.add(east);
+        panel.add(new JLabel(getMapString()));
+        panel.add(south);
+        panel.add(n);
+        panel.add(west);
     }
 
     public static void initMap(){
