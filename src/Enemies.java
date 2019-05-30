@@ -76,7 +76,7 @@ public class Enemies {
             JOptionPane.showMessageDialog(null, "You did " + (attackStrength - armor) + " damage");
 
             if (hitPoints <= 0) {
-                JOptionPane.showMessageDialog(null, name + " has been defeated\nYou got " + goldGiven + " coins");
+                JOptionPane.showMessageDialog(null, name + " has been defeated.");
                 Start.player.addCoins(goldGiven);
                 Start.player.addKill(encounter);
                 if (name.equals("Dragon")){
