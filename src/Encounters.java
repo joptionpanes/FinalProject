@@ -1,4 +1,6 @@
 import javax.swing.*;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -284,6 +286,7 @@ public class Encounters {
                         break;
                     case "Inventory":
                         Start.player.displayInv();
+                        break;
                     case "Forge":
                         String[] forgeOptions = {"Equipped items", "Inventory", "Cancel"};
                         int forge = JOptionPane.showOptionDialog(null,
@@ -305,12 +308,28 @@ public class Encounters {
                             int upgraded = JOptionPane.showOptionDialog(null, "Choose the item to upgrade", "Upgrade",
                                     JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE, null, equipObject, null);
                             for (int i = 0; i < armor.length; i++){
-                                if (equipObject[upgraded] == weapon[i]){
-                                    //Start.player.equip();
+                                if (equipObject[upgraded] == weapon){
+                                    Start.player.equip(weapon[0].toString(),(int)weapon[1]);
                                 }
+                            } {
+                                int rocksUsed = round(makeSlider());
+                                System.out.println(rocksUsed);
+                                if (rocksUsed != 0){
+                                    int price = rocksUsed;
+
+                                    int youSure = JOptionPane.showOptionDialog(null,
+                                            "It will cost you\n rocks:" + rocksUsed + "\n gold:" + price, "Forge",
+                                            JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE, null, forgeOptions, null);
+
+                                }
+
+
                             }
                         } else if (forge == 1) {
-                            //inventory
+                            Start.player.displayInv();
+                        }
+                        else {
+                            System.out.println("Leaving Forge");
                         }
                 }
             } while (!uCString.equals("Continue"));
@@ -421,5 +440,41 @@ public class Encounters {
                 Start.player.defend(dragon);
             }
         }
+    }
+    private int makeSlider(){
+        int input;
+        JFrame parent = new JFrame();
+
+        JOptionPane optionPane = new JOptionPane();
+        JSlider slider = getSlider(optionPane);
+        optionPane.setMessage(new Object[] { "How many would you like to use: ", slider });
+        optionPane.setMessageType(JOptionPane.QUESTION_MESSAGE);
+        optionPane.setOptionType(JOptionPane.OK_CANCEL_OPTION);
+        JDialog dialog = optionPane.createDialog(parent, "Upgrading");
+        dialog.setVisible(true);
+        if (optionPane.getInputValue() == JOptionPane.UNINITIALIZED_VALUE)  input = 10;// need to change to total divided by 2
+        else input = (int)optionPane.getInputValue();
+        return input;
+    }
+
+    static JSlider getSlider(final JOptionPane optionPane) {
+        JSlider slider = new JSlider(0,20); // need call to stones in character made
+        slider.setMajorTickSpacing(10);
+        slider.setPaintTicks(true);
+        slider.setPaintLabels(true);
+        ChangeListener changeListener = new ChangeListener() {
+            public void stateChanged(ChangeEvent changeEvent) {
+                JSlider theSlider = (JSlider) changeEvent.getSource();
+                if (!theSlider.getValueIsAdjusting()) {
+                    optionPane.setInputValue(new Integer(theSlider.getValue()));
+                }
+
+            }
+        };
+        slider.addChangeListener(changeListener);
+        return slider;
+    }
+    public static int round(int num) {
+        return ((((num / (double) 10) - num / 10) * 10) >= 5 ? ((num / 10) * 10 + 10) : (num / 10) * 10);
     }
 }
