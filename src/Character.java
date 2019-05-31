@@ -60,15 +60,15 @@ public class Character {
         }else
             System.out.println("Error when selecting class. Does not exist!");
     }
-
+    
     public void setXp(int i){
         xp = i;
     }
-
+    
     public void setXpNeeded(int i){
         xpNeeded = i;
     }
-
+    
     /**
      * @param q {enemy type (-1 means no quest), amnt to kill, reward, start amount, city loc x, city loc y}
      */
@@ -89,7 +89,7 @@ public class Character {
     }
 
     public int getXpNeeded() {
-        return xpNeeded;
+        return xpNeeded; 
     }
 
     public int getLevel(){

@@ -1,4 +1,6 @@
 import javax.swing.*;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -284,6 +286,7 @@ public class Encounters {
                         break;
                     case "Inventory":
                         Start.player.displayInv();
+                        break;
                     case "Forge":
                         String[] forgeOptions = {"Equipped items", "Inventory", "Cancel"};
                         int forge = JOptionPane.showOptionDialog(null,
@@ -304,13 +307,73 @@ public class Encounters {
                             Object[] equipObject = equipped.toArray();
                             int upgraded = JOptionPane.showOptionDialog(null, "Choose the item to upgrade", "Upgrade",
                                     JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE, null, equipObject, null);
-                            for (int i = 0; i < armor.length; i++){
-                                if (equipObject[upgraded] == weapon[i]){
-                                    //Start.player.equip();
+                            if (upgraded == 0){
+                                for (int i = 0; i < armor.length; i++){
+                                    if (equipObject[upgraded] == weapon){
+                                        Start.player.equip(weapon[0].toString(),(int)weapon[1]);
+                                    }
+                                }
+                                int rocksUsed = makeSlider();
+                                System.out.println(rocksUsed);
+
+                                if (rocksUsed != 0 && rocksUsed != 2 && rocksUsed != -1){
+                                    rocksUsed = round(rocksUsed);
+                                    int price = rocksUsed;
+                                    String[] confirmForge = {"Yes", "Cancel"};
+
+                                    int youSure = JOptionPane.showOptionDialog(null,
+                                            "It will cost you\n rocks:" + rocksUsed + "\n gold:" + price, "Forge",
+                                            JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE, null, confirmForge, null);
+                                    if (youSure == 0) {
+                                        if (Start.player.getCoins() >= price && Start.player.getStones() >= rocksUsed) {
+                                            Start.player.removeCoins(price);
+                                            Object[] rock = {"Rock", rocksUsed};
+                                            Start.player.removeFromInv(rock);
+
+                                        } else {
+                                            JOptionPane.showMessageDialog(null, "You do not have enough money.");
+                                        }
+                                    }
                                 }
                             }
                         } else if (forge == 1) {
-                            //inventory
+                            Object[] eq = Start.player.getEquipables().toArray();
+                            ArrayList<String> equipped = new ArrayList<>();
+                            for (Object o : eq) {
+                                Object[] ob = (Object[]) o;
+                                if ((int) ob[1] != 0) {
+                                    equipped.add(ob[0] + " [" + ob[1] + "]");
+                                }
+                            }
+                            Object[] equipObject = equipped.toArray();
+                            int upgraded = JOptionPane.showOptionDialog(null, "Choose the item to upgrade", "Upgrade",
+                                    JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE, null, equipObject, null);
+                            if (upgraded == 0) {
+                                int rocksUsed = round(makeSlider());
+
+                                if (rocksUsed < 0) {
+                                    int price = rocksUsed;
+                                    String[] confirmForge = {"Yes", "Cancel"};
+
+                                    int youSure = JOptionPane.showOptionDialog(null,
+                                            "It will cost you\n rocks:" + rocksUsed + "\n gold:" + price, "Forge",
+                                            JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE, null, confirmForge, null);
+                                    if (youSure == 0) {
+                                        if (Start.player.getCoins() >= price && Start.player.getStones() >= rocksUsed) {
+                                            Start.player.removeCoins(price);//removes costed coins
+                                            Object[] rock = {"Rock", rocksUsed};
+                                            Start.player.removeFromInv(rock);//removes costed rocks
+                                            //need to change stats
+                                        } else {
+                                            JOptionPane.showMessageDialog(null, "You do not have enough money.");
+                                        }
+
+                                    }
+                                }
+                            }
+                        }
+                        else {
+                            System.out.println("Leaving Forge");
                         }
                 }
             } while (!uCString.equals("Continue"));
@@ -421,5 +484,43 @@ public class Encounters {
                 Start.player.defend(dragon);
             }
         }
+    }
+    private int makeSlider(){
+        int input;
+        JFrame parent = new JFrame();
+
+        JOptionPane optionPane = new JOptionPane();
+        JSlider slider = getSlider(optionPane);
+        optionPane.setMessage(new Object[] { "How many would you like to use: ", slider });
+        optionPane.setMessageType(JOptionPane.QUESTION_MESSAGE);
+        optionPane.setOptionType(JOptionPane.OK_CANCEL_OPTION);
+        JDialog dialog = optionPane.createDialog(parent, "Upgrading");
+        dialog.setVisible(true);
+        Object selected = optionPane.getInputValue();
+        if (selected == JOptionPane.UNINITIALIZED_VALUE)
+            input = -1;// need to change to total divided by 2
+        else input = (int)optionPane.getInputValue();
+        return input;
+    }
+
+    static JSlider getSlider(final JOptionPane optionPane) {
+        JSlider slider = new JSlider(0,20,0);// need call to stones in character made
+        slider.setMajorTickSpacing(10);
+        slider.setPaintTicks(true);
+        slider.setPaintLabels(true);
+        ChangeListener changeListener = new ChangeListener() {
+            public void stateChanged(ChangeEvent changeEvent) {
+                JSlider theSlider = (JSlider) changeEvent.getSource();
+                if (!theSlider.getValueIsAdjusting()) {
+                    optionPane.setInputValue(new Integer(theSlider.getValue()));
+                }
+
+            }
+        };
+        slider.addChangeListener(changeListener);
+        return slider;
+    }
+    public static int round(int num) {
+        return ((((num / (double) 10) - num / 10) * 10) >= 5 ? ((num / 10) * 10 + 10) : (num / 10) * 10);
     }
 }
