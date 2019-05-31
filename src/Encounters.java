@@ -316,11 +316,18 @@ public class Encounters {
                                 System.out.println(rocksUsed);
                                 if (rocksUsed != 0){
                                     int price = rocksUsed;
+                                    String[] confirmForge = {"Yes", "Cancel"};
+
+                                    Object[][] inventory = Start.player.getInventory();
 
                                     int youSure = JOptionPane.showOptionDialog(null,
                                             "It will cost you\n rocks:" + rocksUsed + "\n gold:" + price, "Forge",
-                                            JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE, null, forgeOptions, null);
+                                            JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE, null, confirmForge, null);
+                                    if (youSure == 0){
+                                        Start.player.removeCoins(price);
+                                        //can't figure out how to remove rocks from inv
 
+                                    }
                                 }
 
 
