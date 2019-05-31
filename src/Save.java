@@ -1,4 +1,7 @@
 import javax.swing.*;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.io.*;
 
 public class Save {
@@ -90,6 +93,83 @@ public class Save {
             System.out.println("Exception: " + e);
         }
         return null;
+    }
+
+    public static String getMapString(int centerX, int centerY){
+        final int MAP_SIZE = 5; //from center
+        final String CITY = "⊞";
+        final String NOTHING = "⊟";
+        final String NOT_GENNED = "⊠";
+        final String PLAYER = "⊡";
+        StringBuilder map = new StringBuilder();
+        map.append("<html><span style='font-size:20px'>");
+        for (int j = 0; j < MAP_SIZE * 2 + 1; j++) {
+            for (int i = 0; i < MAP_SIZE * 2 + 1; i++) {
+                try {
+                    if (centerX + MAP_SIZE - i == Movement.getX() && centerY + MAP_SIZE - j == Movement.getY()){
+                        map.append(PLAYER);
+                    } else if (getMapAtPos(centerX + MAP_SIZE - i, centerY + MAP_SIZE - j)[0][0].equals("City")) {
+                        map.append(CITY);
+                    } else if (getMapAtPos(centerX + MAP_SIZE - i, centerY + MAP_SIZE - j)[0][0].equals("NULL")) {
+                        map.append(NOTHING);
+                    }
+                } catch (NullPointerException e) {
+                    //System.out.println("Found nothing while drawing map: " + e);
+                    map.append(NOT_GENNED);
+                }
+            }
+            switch (j){
+                case 3:
+                    map.append("Key:");
+                    break;
+                case 4:
+                    map.append("<span style='font-size:10px'>Player: <span style='font-size:20px'>" + PLAYER);
+                    break;
+                case 5:
+                    map.append("<span style='font-size:10px'>City: <span style='font-size:20px'>" + CITY);
+                    break;
+                case 6:
+                    map.append("<span style='font-size:10px'>Nothing: <span style='font-size:20px'>" + NOTHING);
+                    break;
+                case 7:
+                    map.append("<span style='font-size:10px'>Not Generated: <span style='font-size:20px'>" + NOT_GENNED);
+                    break;
+
+            }
+            map.append("<br/>");
+        }
+        map.append("</html>");
+        return map.toString();
+    }
+
+    public static void displayMap(final int[] x, final int[] y){
+
+        String north = "▲";
+        String south = "▼";
+        String east = "▶";
+        String west = "◀";
+
+        Object[] options = {north, south, west, east, "Continue"};
+        int choice = JOptionPane.showOptionDialog(null, getMapString(x[0], y[0]), "Map", JOptionPane.YES_NO_OPTION,
+                    JOptionPane.PLAIN_MESSAGE, null, options, null);
+        switch (choice){
+            case 0:
+                y[0] += 1;
+                displayMap(x, y);
+                break;
+            case 1:
+                y[0] -= 1;
+                displayMap(x, y);
+                break;
+            case 2:
+                x[0] += 1;
+                displayMap(x, y);
+                break;
+            case 3:
+                x[0] -= 1;
+                displayMap(x, y);
+                break;
+        }
     }
 
     public static void initMap(){

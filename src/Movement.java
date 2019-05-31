@@ -1,4 +1,5 @@
 import javax.swing.*;
+import java.awt.*;
 
 public class Movement {
 
@@ -27,15 +28,29 @@ public class Movement {
     //MOVEMENT MAIN METHOD
     public static void movementMain(){
         //Making The Control Panel for Movement
-        String[] options = new String[] {"Move North", "Move South", "Move East", "Move West",
-                "Inventory", "Save", "Exit and Save"};
-        int response = JOptionPane.showOptionDialog(null, "Control Panel", "Movement",
+        JPanel panel = new JPanel(new GridLayout(2, 1));
+        panel.add(new JLabel("Control Panel:"));
+
+        JToggleButton map = new JToggleButton("Map");
+        JToggleButton inv = new JToggleButton("Inventory");
+        JToggleButton exit = new JToggleButton("Exit and Save");
+
+        ButtonGroup movement = new ButtonGroup();
+        movement.add(map);
+        movement.add(inv);
+        movement.add(exit);
+
+        panel.add(new JLabel("")); //separate
+        panel.add(new JLabel("")); //separate
+        panel.add(inv);
+        panel.add(map);
+        panel.add(exit);
+
+        String[] options = new String[] {"Move North", "Move South", "Move West", "Move East", "Select Option"};
+        int response = JOptionPane.showOptionDialog(null, panel, "Movement",
                 JOptionPane.DEFAULT_OPTION, JOptionPane.PLAIN_MESSAGE,
                 null, options, options[0]);
 
-        JPanel panel2 = new JPanel();
-        JTextField textField = new JTextField(10);
-        panel2.add(textField);
 
         if (response == 0)
             moveNorth();
@@ -45,15 +60,18 @@ public class Movement {
             moveEast();
         else if(response == 3)
             moveWest();
-        else if(response == 4)
+        else if(response == 4 && inv.isSelected())
             Start.player.displayInv();
-        else if (response == 5)
-            save();
-        else if(response == 6 || response == -1)
+        else if(response == 4 && map.isSelected()){
+            int[] x = {getX()};
+            int[] y = {getY()};
+            Save.displayMap(x, y);
+        } else if(response == 4 && exit.isSelected() || response == -1)
             exitAndSave();
 
         location[0] = x;
         location[0] = y;
+        save();
     }
 
 
