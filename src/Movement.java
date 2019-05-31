@@ -31,43 +31,42 @@ public class Movement {
         JPanel panel = new JPanel(new GridLayout(2, 1));
         panel.add(new JLabel("Control Panel:"));
 
-        JToggleButton north = new JToggleButton("Move North");
-        JToggleButton south = new JToggleButton("Move South");
-        JToggleButton east = new JToggleButton("Move East");
-        JToggleButton west = new JToggleButton("Move West");
+        JToggleButton map = new JToggleButton("Map");
+        JToggleButton inv = new JToggleButton("Inventory");
+        JToggleButton exit = new JToggleButton("Exit and Save");
 
         ButtonGroup movement = new ButtonGroup();
-        movement.add(north);
-        movement.add(east);
-        movement.add(south);
-        movement.add(west);
+        movement.add(map);
+        movement.add(inv);
+        movement.add(exit);
 
-        panel.add(north);
         panel.add(new JLabel("")); //separate
-        panel.add(east);
-        panel.add(south);
-        panel.add(west);
+        panel.add(new JLabel("")); //separate
+        panel.add(inv);
+        panel.add(map);
+        panel.add(exit);
 
-        String[] options = new String[] {"Move", "Inventory", "Map", "Exit & Save"};
+        String[] options = new String[] {"Move North", "Move South", "Move West", "Move East", "Select Option"};
         int response = JOptionPane.showOptionDialog(null, panel, "Movement",
                 JOptionPane.DEFAULT_OPTION, JOptionPane.PLAIN_MESSAGE,
                 null, options, options[0]);
 
 
-        if (response == 0 && north.isSelected())
+        if (response == 0)
             moveNorth();
-        else if(response == 0 && south.isSelected())
-            moveSouth();
-        else if(response == 0 && east.isSelected())
-            moveEast();
-        else if(response == 0 && west.isSelected())
-            moveWest();
         else if(response == 1)
+            moveSouth();
+        else if(response == 2)
+            moveEast();
+        else if(response == 3)
+            moveWest();
+        else if(response == 4 && inv.isSelected())
             Start.player.displayInv();
-        else if (response == 2) {
-            int[] xy = {0};
-            Save.displayMap(xy, xy);
-        } else if(response == 3 || response == -1)
+        else if(response == 4 && map.isSelected()){
+            int[] x = {getX()};
+            int[] y = {getY()};
+            Save.displayMap(x, y);
+        } else if(response == 4 && exit.isSelected() || response == -1)
             exitAndSave();
 
         location[0] = x;

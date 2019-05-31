@@ -106,17 +106,35 @@ public class Save {
         for (int j = 0; j < MAP_SIZE * 2 + 1; j++) {
             for (int i = 0; i < MAP_SIZE * 2 + 1; i++) {
                 try {
-                    if (centerX - MAP_SIZE + i == Movement.getX() && centerY - MAP_SIZE + j == Movement.getY()){
+                    if (centerX + MAP_SIZE - i == Movement.getX() && centerY + MAP_SIZE - j == Movement.getY()){
                         map.append(PLAYER);
-                    } else if (getMapAtPos(centerX - MAP_SIZE + i, centerY - MAP_SIZE + j)[0][0].equals("City")) {
+                    } else if (getMapAtPos(centerX + MAP_SIZE - i, centerY + MAP_SIZE - j)[0][0].equals("City")) {
                         map.append(CITY);
-                    } else if (getMapAtPos(centerX - MAP_SIZE + i, centerY - MAP_SIZE + j)[0][0].equals("NULL")) {
+                    } else if (getMapAtPos(centerX + MAP_SIZE - i, centerY + MAP_SIZE - j)[0][0].equals("NULL")) {
                         map.append(NOTHING);
                     }
                 } catch (NullPointerException e) {
                     //System.out.println("Found nothing while drawing map: " + e);
                     map.append(NOT_GENNED);
                 }
+            }
+            switch (j){
+                case 3:
+                    map.append("Key:");
+                    break;
+                case 4:
+                    map.append("<span style='font-size:10px'>Player: <span style='font-size:20px'>" + PLAYER);
+                    break;
+                case 5:
+                    map.append("<span style='font-size:10px'>City: <span style='font-size:20px'>" + CITY);
+                    break;
+                case 6:
+                    map.append("<span style='font-size:10px'>Nothing: <span style='font-size:20px'>" + NOTHING);
+                    break;
+                case 7:
+                    map.append("<span style='font-size:10px'>Not Generated: <span style='font-size:20px'>" + NOT_GENNED);
+                    break;
+
             }
             map.append("<br/>");
         }
@@ -131,7 +149,7 @@ public class Save {
         String east = "▶";
         String west = "◀";
 
-        Object[] options = {north, south, east, west, "Continue"};
+        Object[] options = {north, south, west, east, "Continue"};
         int choice = JOptionPane.showOptionDialog(null, getMapString(x[0], y[0]), "Map", JOptionPane.YES_NO_OPTION,
                     JOptionPane.PLAIN_MESSAGE, null, options, null);
         switch (choice){
