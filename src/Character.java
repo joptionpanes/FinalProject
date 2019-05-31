@@ -1,4 +1,5 @@
 import javax.swing.*;
+import java.awt.image.AreaAveragingScaleFilter;
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -241,17 +242,40 @@ public class Character {
         return hitPoints;
     }
 
-    public ArrayList<Object[]> getEquipables(){
+    public ArrayList<Object[]> getAllEquipables(){
         ArrayList<Object[]> equipables = new ArrayList<>();
         for (Object[] i : inventory){
             String itemName = i[0].toString();
-            if (itemName.contains("Armor")||itemName.contains("Catalyst")||itemName.contains("Sword")||
-                    itemName.contains("Bow")||itemName.contains("Wand")||itemName.contains("Helmet")||
-                    itemName.contains("Chestplate")||itemName.contains("Leggings")||itemName.contains("Boots")){
+            if (itemName.contains("Catalyst")||itemName.contains("Sword")|| itemName.contains("Bow")||
+                    itemName.contains("Wand")||itemName.contains("Helmet")|| itemName.contains("Chestplate")||
+                    itemName.contains("Leggings")||itemName.contains("Boots")){
                 equipables.add(i);
             }
         }
         return equipables; //equ[3]
+    }
+
+    public ArrayList<Object[]> getEquipables(){
+        ArrayList<Object[]> equipables = new ArrayList<>();
+        for (Object[] i : inventory){
+            String itemName = i[0].toString();
+            if (itemName.contains("Sword")|| itemName.contains("Bow")||itemName.contains("Wand")
+                    ||itemName.contains("Helmet")|| itemName.contains("Chestplate")||itemName.contains("Leggings")
+                    ||itemName.contains("Boots")){
+                equipables.add(i);
+            }
+        }
+        return equipables; //equ[3]
+    }
+
+    public int getStones(){
+        for (Object[] i : inventory){
+            String itemName = i[0].toString();
+            if (itemName.contains("Rock")){
+                return (int)i[1];
+            }
+        }
+        return 0;
     }
 
     public ArrayList<Object[]> getAllInv(){
@@ -270,7 +294,7 @@ public class Character {
         int choice = JOptionPane.showOptionDialog(null, inv, "Inventory", JOptionPane.YES_NO_CANCEL_OPTION,
                 JOptionPane.PLAIN_MESSAGE, null, options, null);
         if (choice == 1){ //equip
-            ArrayList<Object[]> equipables = getEquipables(); //get all equipable items
+            ArrayList<Object[]> equipables = getAllEquipables(); //get all equipable items
             Object[] eq = listToObject(equipables); //convert to object array
             try {
                 String equipItem = JOptionPane.showInputDialog(null, "Choose the item you wish to equip:", "Equip",
@@ -415,7 +439,7 @@ public class Character {
         int eqNum = 0;
         while (!found) { //until item is found,
             try {
-                if (Arrays.equals(item, inventory[eqNum])) { //if item to be removed is same as current item in inv
+                if (item[0].equals(inventory[eqNum][0])) { //if item name to be removed is same as current item in inv
                     found = true; //item location is found
                 } else {
                     eqNum++;
@@ -424,10 +448,13 @@ public class Character {
                 System.out.println("User selected cancel: " + e);
             }
         }
-        ArrayList<Object[]> list = new ArrayList<>(Arrays.asList(inventory));
-        list.remove(eqNum);
-        list.add(DEFAULT_EMPTY);
-        inventory = list.toArray(new Object[][]{});
+        inventory[eqNum][1] = (int)inventory[eqNum][1] - (int)item[1];
+        if ((int)inventory[eqNum][1] == 0) {
+            ArrayList<Object[]> list = new ArrayList<>(Arrays.asList(inventory));
+            list.remove(eqNum);
+            list.add(DEFAULT_EMPTY);
+            inventory = list.toArray(new Object[][]{});
+        }
     }
 
     public int enemiesKilled(){
