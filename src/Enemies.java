@@ -70,15 +70,18 @@ public class Enemies {
     public void defend(){
         int attackStrength = Start.player.getAttackStrength();
         if (attackStrength - armor <= 0){
-            JOptionPane.showMessageDialog(null,"You did 0 damage");
+            JOptionPane.showMessageDialog(null,"You did 1 damage");
+            hitPoints = hitPoints - 1;
         }else {
             hitPoints = (hitPoints > (attackStrength - armor)) ? hitPoints - (attackStrength - armor) : 0;// checks getAttackStrength vs dmg and adjusts health
             JOptionPane.showMessageDialog(null, "You did " + (attackStrength - armor) + " damage");
 
             if (hitPoints <= 0) {
-                JOptionPane.showMessageDialog(null, name + " has been defeated.");
+                JOptionPane.showMessageDialog(null, name + " has been defeated\nYou got " + goldGiven + " coins and " + xpGiven + " xp");
                 Start.player.addCoins(goldGiven);
                 Start.player.addKill(encounter);
+                Start.player.addXp(xpGiven);
+                Level.Lvl();
                 if (name.equals("Dragon")){
                     dragonKilled = true;
                 }
