@@ -2,7 +2,7 @@ import javax.swing.*;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-public class Character2 {
+public class Character {
 
     private String[] classes = {"Swordsman", "Archer", "Mage"};
     private int playerClass; //Classes 0-2, 0 = swordsman, 1 = archer, 2 = mage
@@ -29,7 +29,7 @@ public class Character2 {
     private final Object[] DEFAULT_EMPTY = {"EMPTY", 0};
 
 
-    public Character2(){ //defaults
+    public Character(){ //defaults
         playerClass = 0;
         coins = 10;
         xp = 0;
