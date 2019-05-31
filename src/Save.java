@@ -1,5 +1,7 @@
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.io.*;
 
 public class Save {
@@ -93,9 +95,7 @@ public class Save {
         return null;
     }
 
-    public static String getMapString(){
-        int centerX = Movement.getX();
-        int centerY = Movement.getY();
+    public static String getMapString(int centerX, int centerY){
         final int MAP_SIZE = 5; //from center
         final String CITY = "⊞";
         final String NOTHING = "⊟";
@@ -106,7 +106,7 @@ public class Save {
         for (int j = 0; j < MAP_SIZE * 2 + 1; j++) {
             for (int i = 0; i < MAP_SIZE * 2 + 1; i++) {
                 try {
-                    if (i - MAP_SIZE == 0 && j - MAP_SIZE == 0){
+                    if (centerX - MAP_SIZE + i == Movement.getX() && centerY - MAP_SIZE + j == Movement.getY()){
                         map.append(PLAYER);
                     } else if (getMapAtPos(centerX - MAP_SIZE + i, centerY - MAP_SIZE + j)[0][0].equals("City")) {
                         map.append(CITY);
@@ -114,7 +114,7 @@ public class Save {
                         map.append(NOTHING);
                     }
                 } catch (NullPointerException e) {
-                    System.out.println("Found nothing while drawing map: " + e);
+                    //System.out.println("Found nothing while drawing map: " + e);
                     map.append(NOT_GENNED);
                 }
             }
@@ -124,33 +124,34 @@ public class Save {
         return map.toString();
     }
 
-    public static void displayMap(){
-        JPanel panel = new JPanel(new GridLayout(2, 1));
-        JLabel n = new JLabel("");
+    public static void displayMap(final int[] x, final int[] y){
 
-        JToggleButton north = new JToggleButton("Move North");
-        JToggleButton south = new JToggleButton("Move South");
-        JToggleButton east = new JToggleButton("Move East");
-        JToggleButton west = new JToggleButton("Move West");
-        north.setSize(100,100);
+        String north = "▲";
+        String south = "▼";
+        String east = "▶";
+        String west = "◀";
 
-        ButtonGroup movement = new ButtonGroup();
-        movement.add(north);
-        movement.add(east);
-        movement.add(south);
-        movement.add(west);
-
-        panel.add(n);
-        panel.add(n);
-        panel.add(north);
-        panel.add(n);
-        panel.add(east);
-        panel.add(new JLabel(getMapString()));
-        panel.add(south);
-        panel.add(n);
-        panel.add(west);
-        Object[] options = {"Move Map", "Continue"};
-        JOptionPane.showOptionDialog(null, panel, "Map", JOptionPane.YES_NO_OPTION, JOptionPane.PLAIN_MESSAGE, null, options, null);
+        Object[] options = {north, south, east, west, "Continue"};
+        int choice = JOptionPane.showOptionDialog(null, getMapString(x[0], y[0]), "Map", JOptionPane.YES_NO_OPTION,
+                    JOptionPane.PLAIN_MESSAGE, null, options, null);
+        switch (choice){
+            case 0:
+                y[0] += 1;
+                displayMap(x, y);
+                break;
+            case 1:
+                y[0] -= 1;
+                displayMap(x, y);
+                break;
+            case 2:
+                x[0] += 1;
+                displayMap(x, y);
+                break;
+            case 3:
+                x[0] -= 1;
+                displayMap(x, y);
+                break;
+        }
     }
 
     public static void initMap(){

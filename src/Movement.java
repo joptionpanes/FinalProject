@@ -64,9 +64,10 @@ public class Movement {
             moveWest();
         else if(response == 1)
             Start.player.displayInv();
-        else if (response == 2)
-            Save.displayMap();
-        else if(response == 3 || response == -1)
+        else if (response == 2) {
+            int[] xy = {0};
+            Save.displayMap(xy, xy);
+        } else if(response == 3 || response == -1)
             exitAndSave();
 
         location[0] = x;
