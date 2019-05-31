@@ -1,4 +1,5 @@
 import javax.swing.*;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -7,11 +8,13 @@ public class Character {
     private String[] classes = {"Swordsman", "Archer", "Mage"};
     private int playerClass; //Classes 0-2, 0 = swordsman, 1 = archer, 2 = mage
     private int coins;
+    private int xp;
     private int attackStrength;
     private int hitPoints;
     private int maxHp;
     private int armorRating;
-    private int level;
+    private int xpNeeded = 20;
+    private static int level;
     private int defense;
     private int strength;
     private int[] killCounters = {0, 0, 0, 0, 0, 0};
@@ -56,6 +59,12 @@ public class Character {
         }else
             System.out.println("Error when selecting class. Does not exist!");
     }
+    public static void setXp(int i){
+        Start.player.xp = i;
+    }
+    public static void setXpNeeded(int i){
+        Start.player.xpNeeded = i;
+    }
 
     /**
      * @param q {enemy type (-1 means no quest), amnt to kill, reward, start amount, city loc x, city loc y}
@@ -76,6 +85,8 @@ public class Character {
         return classes;
     }
 
+    public static int getXpNeeded() { return Start.player.xpNeeded; }
+
     public int getLevel(){
         return level;
     }
@@ -90,8 +101,13 @@ public class Character {
 
     public void addCoins(int c){
         coins += c;
-        JOptionPane.showMessageDialog(null, c + " coins added. Total: " + coins);
+        System.out.println(c + " coins added. Total: " + coins);
     }
+    public void addXp(int c){
+        xp += c;
+        System.out.println(c + " xp added. Total: " + xp);
+    }
+
 
     public boolean addInventory(String name, int number){
         boolean itemPlaced = false;
@@ -193,7 +209,7 @@ public class Character {
                 inv.replace(inv.length()-2, inv.length(), "."); //replace last two chars "; " with "."
                 return inv.toString();
             }
-            inv.append(s[0] + " [" + s[1] + "]"); //add the item to the string in this format: "itemName (num)"
+            inv.append(s[0] + " (" + s[1] + ")"); //add the item to the string in this format: "itemName (num)"
             ++i;
             if (i < inventory.length){
                 inv.append("; "); //separate each item with "; "
@@ -215,22 +231,14 @@ public class Character {
             if (num.equals("0")) //if the slot is empty
                 arm.append(armorPieces[i] + " slot is empty"); //say the slot is empty
             else
-                arm.append(a[0] + " [" + a[1] + "]"); //add the item to the string in this format: "itemName (prot);"
+                arm.append(a[0] + " (" + a[1] + ")"); //add the item to the string in this format: "itemName (prot);"
             ++i;
-            if (i < armor.length)
+            if (i < inventory.length)
                 arm.append(";\n"); //separate each item with ";" and a new line
-            else if (i == armor.length)
+            else if (i == inventory.length)
                 arm.append("."); //end with "."
         }
         return arm.toString();
-    }
-
-    public String getWeaponString(){
-        if ((int)weapon[1] == 0){
-            return "No weapon equipped";
-        } else {
-            return weapon[0] + " [" + weapon[1] + "]";
-        }
     }
 
     public int getMaxHp(){
@@ -265,7 +273,7 @@ public class Character {
     }
 
     public boolean displayInv(){
-        String inv = getInvString() + "\n\n" + getArmorString() + "\n\n" + getWeaponString();
+        String inv = getInvString() + "\n\n" + getArmorString();
         String[] options = {"Close", "Equip", "Drop"};
         int choice = JOptionPane.showOptionDialog(null, inv, "Inventory", JOptionPane.YES_NO_CANCEL_OPTION,
                 JOptionPane.PLAIN_MESSAGE, null, options, null);
@@ -361,7 +369,8 @@ public class Character {
         }
     }
 
-    public void addLevel(){
+    public static void addLevel(){
+        JOptionPane.showMessageDialog(null, "!LEVEL UP!");
         level++;
     }
 
@@ -449,4 +458,6 @@ public class Character {
     public Object[] getWeapon(){
         return weapon;
     }
+
+    public static int getXp(){ return Start.player.xp; }
 }
