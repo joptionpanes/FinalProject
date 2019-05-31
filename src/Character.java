@@ -1,17 +1,18 @@
 import javax.swing.*;
-import java.awt.image.AreaAveragingScaleFilter;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-public class Character {
+public class Character2 {
 
     private String[] classes = {"Swordsman", "Archer", "Mage"};
     private int playerClass; //Classes 0-2, 0 = swordsman, 1 = archer, 2 = mage
     private int coins;
+    private int xp;
     private int attackStrength;
     private int hitPoints;
     private int maxHp;
     private int armorRating;
+    private int xpNeeded;
     private int level;
     private int defense;
     private int strength;
@@ -28,13 +29,15 @@ public class Character {
     private final Object[] DEFAULT_EMPTY = {"EMPTY", 0};
 
 
-    public Character(){ //defaults
+    public Character2(){ //defaults
         playerClass = 0;
         coins = 10;
+        xp = 0;
         attackStrength = 1;
         hitPoints = 100;
         maxHp = hitPoints;
         armorRating = 0;
+        xpNeeded = 20;
         level = 0;
         for (int i = 0; i < inventory.length; i++) { //inventory
             inventory[i] = DEFAULT_EMPTY;
@@ -57,7 +60,15 @@ public class Character {
         }else
             System.out.println("Error when selecting class. Does not exist!");
     }
-
+    
+    public void setXp(int i){
+        xp = i;
+    }
+    
+    public void setXpNeeded(int i){
+        xpNeeded = i;
+    }
+    
     /**
      * @param q {enemy type (-1 means no quest), amnt to kill, reward, start amount, city loc x, city loc y}
      */
@@ -77,6 +88,10 @@ public class Character {
         return classes;
     }
 
+    public int getXpNeeded() {
+        return xpNeeded; 
+    }
+
     public int getLevel(){
         return level;
     }
@@ -92,6 +107,11 @@ public class Character {
     public void addCoins(int c){
         coins += c;
         JOptionPane.showMessageDialog(null, c + " coins added. Total: " + coins);
+    }
+
+    public void addXp(int c){
+        xp += c;
+        System.out.println(c + " xp added. Total: " + xp);
     }
 
     public boolean addInventory(String name, int number){
@@ -386,12 +406,13 @@ public class Character {
     }
 
     public void addLevel(){
+        JOptionPane.showMessageDialog(null, "!LEVEL UP!");
         level++;
     }
 
     public void save(){
         Object[][][] saveValues = {
-                        inventory, armor, {weapon},
+                inventory, armor, {weapon},
                 {
                         {Movement.getX(), Movement.getY()}, {playerClass}, {coins}, {hitPoints, maxHp},
                         {attackStrength, armorRating}, {level}, {killCounters}, {activeQuest}, {defense, strength}
@@ -475,5 +496,9 @@ public class Character {
 
     public Object[] getWeapon(){
         return weapon;
+    }
+
+    public int getXp(){
+        return xp;
     }
 }
