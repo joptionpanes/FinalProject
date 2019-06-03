@@ -15,6 +15,7 @@ public class Score {
         Enemies enemys = new Enemies();
         score += (Start.player.enemiesKilled() * 10);
         score += Start.player.getCoins();
+        score += (Start.player.getLevel() * 100);
         if(score > MAX_SCORE){
             score = MAX_SCORE;
         }

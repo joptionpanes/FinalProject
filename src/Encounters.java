@@ -1,4 +1,6 @@
 import javax.swing.*;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -239,8 +241,8 @@ public class Encounters {
                                     Start.player.setActiveQuest(defaultQuest);
                                 }
                             } else {
-                                JOptionPane.showMessageDialog(null, "Quest progress:\n" +
-                                        "Killed: " + Start.player.getKills(playerQuest[0]) + "/" + playerQuest[1]);
+                                JOptionPane.showMessageDialog(null, "Quest progress:\n" + "Killed: " +
+                                        (Start.player.getKills(playerQuest[0]) - playerQuest[3]) + "/" + playerQuest[1]);
                             }
                         } else {
                             int acceptQuest = JOptionPane.showConfirmDialog(null, "The offered quest is:\n" + questString +
@@ -277,13 +279,14 @@ public class Encounters {
                             Object[][] inventory = Start.player.getInventory();
                             Object[] item = {inventory[eqNum][0].toString(), inventory[eqNum][1]};
                             Start.player.addCoins((int) (Math.random() * (int) inventory[eqNum][1]) + (int) inventory[eqNum][1]);
-                            Start.player.removeFromInv(item);
+                            Start.player.removeFromInv(item, false);
                         } catch (NullPointerException e) {
                             System.out.println("Sell cancelled: " + e);
                         }
                         break;
                     case "Inventory":
                         Start.player.displayInv();
+                        break;
                     case "Forge":
                         String[] forgeOptions = {"Equipped items", "Inventory", "Cancel"};
                         int forge = JOptionPane.showOptionDialog(null,
@@ -304,13 +307,104 @@ public class Encounters {
                             Object[] equipObject = equipped.toArray();
                             int upgraded = JOptionPane.showOptionDialog(null, "Choose the item to upgrade", "Upgrade",
                                     JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE, null, equipObject, null);
-                            for (int i = 0; i < armor.length; i++){
-                                if (equipObject[upgraded] == weapon[i]){
-                                    //Start.player.equip();
+                            if (upgraded == 0){
+                                int price = makeSlider();
+                                System.out.println(price);
+
+                                if (price != 0 && price != 2 && price != -1){
+                                    price = round(price);
+                                    String[] confirmForge = {"Yes", "Cancel"};
+
+                                    int youSure = JOptionPane.showOptionDialog(null,
+                                            "It will cost you\n" + price + " rocks\n" + price + " gold", "Forge",
+                                            JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE, null, confirmForge, null);
+                                    if (youSure == 0) {
+                                        if (Start.player.getCoins() >= price && Start.player.getStones() >= price) {
+                                            Start.player.removeCoins(price);
+                                            Object[] rock = {"Rock", price};
+                                            Start.player.removeFromInv(rock, true);
+                                            for (int i = 0; i < armor.length; i++){
+                                                if (equipObject[upgraded] == weapon){
+                                                    Start.player.upgradeWeaponItem((int)(Math.random() * price) + 1);
+                                                } else {
+                                                    for (int j = 0; j < armor.length; j++){
+                                                        if (equipObject[upgraded] == armor[j]){
+                                                            int upgradeAmount = (int)(Math.random() * price) + 1; //change!
+                                                            Start.player.upgradeArmorItem(armor[j], upgradeAmount);
+                                                        }
+                                                    }
+                                                }
+                                            }
+
+                                        } else if (Start.player.getCoins() < price && Start.player.getStones() < price){
+                                            JOptionPane.showMessageDialog(null, "You do not have enough money nor rocks.");
+                                        } else if (Start.player.getCoins() < price){
+                                            JOptionPane.showMessageDialog(null, "You do not have enough money.");
+                                        } else if (Start.player.getStones() < price){
+                                            JOptionPane.showMessageDialog(null, "You do not have enough rocks.");
+                                        }
+                                    }
                                 }
                             }
                         } else if (forge == 1) {
-                            //inventory
+                            Object[] eq = Start.player.getEquipables().toArray();
+                            ArrayList<String> equipped = new ArrayList<>();
+                            Object[][] eqFix = new Object[eq.length][2]; //fixed object array
+                            int i = 0;
+                            for (Object o : eq) {
+                                Object[] ob = (Object[]) o;
+                                //if ((int) ob[1] != 0) {
+                                    Object[] current = {ob[0], ob[1]};
+                                    eqFix[i] = current;
+                                //}
+                                i++;
+                            }
+                            for (Object[] o : eqFix) {
+                                //if ((int) ob[1] != 0) {
+                                    equipped.add(o[0] + " [" + o[1] + "]");
+                                //}
+                            }
+                            Object[] equipObject = equipped.toArray(); //equipables in inv
+                            String upgraded = JOptionPane.showInputDialog(null, "Choose the item to upgrade", "Upgrade",
+                                    JOptionPane.QUESTION_MESSAGE, null, equipObject, null).toString();
+                            boolean found = false;
+                            int eqNum = 0;
+                            while (!found) { //until item is found,
+                                if (upgraded.equals(equipObject[eqNum])){ //if selected is same as current item in object array
+                                    found = true; //item location is found
+                                } else {
+                                    eqNum++;
+                                }
+                            }
+
+                            Object[] item = {eqFix[eqNum][0], eqFix[eqNum][1]};
+                            int price = round(makeSlider());
+
+                            if (price < 0) {
+                                String[] confirmForge = {"Yes", "Cancel"};
+
+                                int youSure = JOptionPane.showOptionDialog(null,
+                                        "It will cost you\n" + price + " rocks\n" + price + " gold", "Forge",
+                                        JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE, null, confirmForge, null);
+                                if (youSure == 0) {
+                                    if (Start.player.getCoins() >= price && Start.player.getStones() >= price) {
+                                        Start.player.removeCoins(price);
+                                        Object[] rock = {"Rock", price};
+                                        Start.player.removeFromInv(rock, true);
+                                        Start.player.upgradeInvItem(item, (int)(Math.random() * price) + 1);
+
+                                    } else if (Start.player.getCoins() < price && Start.player.getStones() < price){
+                                        JOptionPane.showMessageDialog(null, "You do not have enough money nor rocks.");
+                                    } else if (Start.player.getCoins() < price){
+                                        JOptionPane.showMessageDialog(null, "You do not have enough money.");
+                                    } else if (Start.player.getStones() < price){
+                                        JOptionPane.showMessageDialog(null, "You do not have enough rocks.");
+                                    }
+                                }
+                            }
+                        }
+                        else {
+                            System.out.println("Leaving Forge");
                         }
                 }
             } while (!uCString.equals("Continue"));
@@ -322,7 +416,7 @@ public class Encounters {
     }
 
     public void generateBattle(){
-        int level = Start.player.getLevel();
+        int level = Start.player.getLevel() / 3;
         if (level > 5) {
             level = 5;
         }
@@ -421,5 +515,41 @@ public class Encounters {
                 Start.player.defend(dragon);
             }
         }
+    }
+    private int makeSlider(){
+        int input;
+        JFrame parent = new JFrame();
+
+        JOptionPane optionPane = new JOptionPane();
+        JSlider slider = getSlider(optionPane);
+        optionPane.setMessage(new Object[] { "How many would you like to use: ", slider });
+        optionPane.setMessageType(JOptionPane.QUESTION_MESSAGE);
+        optionPane.setOptionType(JOptionPane.OK_CANCEL_OPTION);
+        JDialog dialog = optionPane.createDialog(parent, "Upgrading");
+        dialog.setVisible(true);
+        Object selected = optionPane.getInputValue();
+        if (selected == JOptionPane.UNINITIALIZED_VALUE)
+            input = -1;// need to change to total divided by 2
+        else input = (int)optionPane.getInputValue();
+        return input;
+    }
+
+    static JSlider getSlider(final JOptionPane optionPane) {
+        JSlider slider = new JSlider(0, Start.player.getStones(), 0);// need call to stones in character made
+        slider.setMajorTickSpacing(10);
+        slider.setPaintTicks(true);
+        slider.setPaintLabels(true);
+        ChangeListener changeListener = changeEvent -> {
+            JSlider theSlider = (JSlider) changeEvent.getSource();
+            if (!theSlider.getValueIsAdjusting()) {
+                optionPane.setInputValue(theSlider.getValue());
+            }
+
+        };
+        slider.addChangeListener(changeListener);
+        return slider;
+    }
+    public static int round(int num) {
+        return ((((num / (double) 10) - num / 10) * 10) >= 5 ? ((num / 10) * 10 + 10) : (num / 10) * 10);
     }
 }

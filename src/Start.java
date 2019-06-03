@@ -3,6 +3,7 @@ import java.io.*;
 
 public class Start {
     public static Character player = new Character();
+    public static Display d = new Display();
     public static void main(String[] args){
         File saveLocation = new File(Save.getSaveLocation());
         if (saveLocation.exists()){
@@ -47,6 +48,10 @@ public class Start {
             player.setPlayerClass(classChoice);
             Save.initMap();
             player.save();
+            for (int i = 0; i < 5; i++){
+                player.addInventory("Wand", 10 + i * 2);
+            }
+            player.addInventory("Rock", 100);
         }
         else if (selection == 1){ //load existing
             if (!player.load()){ //if user cancelled or clicked x

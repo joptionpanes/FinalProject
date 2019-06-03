@@ -7,10 +7,12 @@ public class Character {
     private String[] classes = {"Swordsman", "Archer", "Mage"};
     private int playerClass; //Classes 0-2, 0 = swordsman, 1 = archer, 2 = mage
     private int coins;
+    private int xp;
     private int attackStrength;
     private int hitPoints;
     private int maxHp;
     private int armorRating;
+    private int xpNeeded;
     private int level;
     private int defense;
     private int strength;
@@ -30,10 +32,12 @@ public class Character {
     public Character(){ //defaults
         playerClass = 0;
         coins = 10;
+        xp = 0;
         attackStrength = 1;
         hitPoints = 100;
         maxHp = hitPoints;
         armorRating = 0;
+        xpNeeded = 20;
         level = 0;
         for (int i = 0; i < inventory.length; i++) { //inventory
             inventory[i] = DEFAULT_EMPTY;
@@ -56,7 +60,15 @@ public class Character {
         }else
             System.out.println("Error when selecting class. Does not exist!");
     }
-
+    
+    public void setXp(int i){
+        xp = i;
+    }
+    
+    public void setXpNeeded(int i){
+        xpNeeded = i;
+    }
+    
     /**
      * @param q {enemy type (-1 means no quest), amnt to kill, reward, start amount, city loc x, city loc y}
      */
@@ -76,6 +88,10 @@ public class Character {
         return classes;
     }
 
+    public int getXpNeeded() {
+        return xpNeeded; 
+    }
+
     public int getLevel(){
         return level;
     }
@@ -91,6 +107,11 @@ public class Character {
     public void addCoins(int c){
         coins += c;
         JOptionPane.showMessageDialog(null, c + " coins added. Total: " + coins);
+    }
+
+    public void addXp(int c){
+        xp += c;
+        JOptionPane.showMessageDialog(null, c + " xp added. Total: " + xp);
     }
 
     public boolean addInventory(String name, int number){
@@ -114,6 +135,30 @@ public class Character {
             }
         }
         return itemPlaced;
+    }
+
+    public void upgradeInvItem(Object[] item, int number){
+        for (int i = 0; i < inventory.length; i++){ //go thru all inventory items
+            if (Arrays.equals(item, inventory[i])) {
+                Object[] inventoryItem = {inventory[i][0], (int)inventory[i][1] + number}; //add them together and
+                inventory[i] = inventoryItem; //put upgraded item in the slot
+                return;
+            }
+        }
+    }
+
+    public void upgradeArmorItem(Object[] item, int number){
+        for (int i = 0; i < armor.length; i++){ //go thru all armor items
+            if (Arrays.equals(item, armor[i])) {
+                Object[] inventoryItem = {armor[i][0], (int)armor[i][1] + number}; //add them together and
+                armor[i] = inventoryItem; //put upgraded item in the slot
+                return;
+            }
+        }
+    }
+
+    public void upgradeWeaponItem(int number){
+        weapon = new Object[]{weapon[0], (int) weapon[1] + number}; //put upgraded item in the slot
     }
 
     public Object[] equip(String name, int value){
@@ -241,17 +286,40 @@ public class Character {
         return hitPoints;
     }
 
-    public ArrayList<Object[]> getEquipables(){
+    public ArrayList<Object[]> getAllEquipables(){
         ArrayList<Object[]> equipables = new ArrayList<>();
         for (Object[] i : inventory){
             String itemName = i[0].toString();
-            if (itemName.contains("Armor")||itemName.contains("Catalyst")||itemName.contains("Sword")||
-                    itemName.contains("Bow")||itemName.contains("Wand")||itemName.contains("Helmet")||
-                    itemName.contains("Chestplate")||itemName.contains("Leggings")||itemName.contains("Boots")){
+            if (itemName.contains("Catalyst")||itemName.contains("Sword")|| itemName.contains("Bow")||
+                    itemName.contains("Wand")||itemName.contains("Helmet")|| itemName.contains("Chestplate")||
+                    itemName.contains("Leggings")||itemName.contains("Boots")){
                 equipables.add(i);
             }
         }
         return equipables; //equ[3]
+    }
+
+    public ArrayList<Object[]> getEquipables(){
+        ArrayList<Object[]> equipables = new ArrayList<>();
+        for (Object[] i : inventory){
+            String itemName = i[0].toString();
+            if (itemName.contains("Sword")|| itemName.contains("Bow")||itemName.contains("Wand")
+                    ||itemName.contains("Helmet")|| itemName.contains("Chestplate")||itemName.contains("Leggings")
+                    ||itemName.contains("Boots")){
+                equipables.add(i);
+            }
+        }
+        return equipables; //equ[3]
+    }
+
+    public int getStones(){
+        for (Object[] i : inventory){
+            String itemName = i[0].toString();
+            if (itemName.contains("Rock")){
+                return (int)i[1];
+            }
+        }
+        return 0;
     }
 
     public ArrayList<Object[]> getAllInv(){
@@ -270,7 +338,7 @@ public class Character {
         int choice = JOptionPane.showOptionDialog(null, inv, "Inventory", JOptionPane.YES_NO_CANCEL_OPTION,
                 JOptionPane.PLAIN_MESSAGE, null, options, null);
         if (choice == 1){ //equip
-            ArrayList<Object[]> equipables = getEquipables(); //get all equipable items
+            ArrayList<Object[]> equipables = getAllEquipables(); //get all equipable items
             Object[] eq = listToObject(equipables); //convert to object array
             try {
                 String equipItem = JOptionPane.showInputDialog(null, "Choose the item you wish to equip:", "Equip",
@@ -286,8 +354,8 @@ public class Character {
                 }
                 Object[] prev;
                 prev = equip(equipables.get(eqNum)[0].toString(), (int)equipables.get(eqNum)[1]); //equip selected item
-                Object[] item = {equipables.get(eqNum)[0].toString(), equipables.get(eqNum)[1]};
-                removeFromInv(item);
+                Object[] item = {equipables.get(eqNum)[0], equipables.get(eqNum)[1]};
+                removeFromInv(item, false);
                 addInventory(prev[0].toString(), (int)prev[1]);
                 return true; //return true if item is equipped
             } catch (NullPointerException e){
@@ -310,7 +378,7 @@ public class Character {
                     }
                 }
                 Object[] item = {inventory[eqNum][0].toString(), inventory[eqNum][1]};
-                removeFromInv(item);
+                removeFromInv(item, false);
             } catch (NullPointerException e){
                 System.out.println("Drop cancelled: " + e);
                 return false;
@@ -362,15 +430,17 @@ public class Character {
     }
 
     public void addLevel(){
+        JOptionPane.showMessageDialog(null, "!LEVEL UP!");
         level++;
     }
 
     public void save(){
         Object[][][] saveValues = {
-                        inventory, armor, {weapon},
+                inventory, armor, {weapon},
                 {
                         {Movement.getX(), Movement.getY()}, {playerClass}, {coins}, {hitPoints, maxHp},
-                        {attackStrength, armorRating}, {level}, {killCounters}, {activeQuest}, {defense, strength}
+                        {attackStrength, armorRating}, {xp, level, xpNeeded}, {killCounters}, {activeQuest},
+                        {defense, strength}
                 },
 
         };
@@ -392,7 +462,9 @@ public class Character {
             maxHp = (int) saveValues[3][3][1];
             attackStrength = (int) saveValues[3][4][0];
             armorRating = (int) saveValues[3][4][1];
-            level = (int) saveValues[3][5][0];
+            xp = (int) saveValues[3][5][0];
+            level = (int) saveValues[3][5][1];
+            xp = (int) saveValues[3][5][2];
             killCounters = (int[])saveValues[3][6][0];
             activeQuest = (int[]) saveValues[3][7][0];
             defense = (int) saveValues[3][8][0];
@@ -410,24 +482,44 @@ public class Character {
         System.out.println(c + " coins removed. ");
     }
 
-    public void removeFromInv(Object[] item){
+    public void removeFromInv(Object[] item, boolean any){
         boolean found = false;
         int eqNum = 0;
-        while (!found) { //until item is found,
-            try {
-                if (Arrays.equals(item, inventory[eqNum])) { //if item to be removed is same as current item in inv
-                    found = true; //item location is found
-                } else {
-                    eqNum++;
+        if (any) {
+            while (!found) { //until item is found,
+                try {
+                    if (item[0].equals(inventory[eqNum][0])) { //if item name to be removed is same as current item in inv
+                        found = true; //item location is found
+                    } else {
+                        eqNum++;
+                    }
+                } catch (NullPointerException e) {
+                    System.out.println("User selected cancel: " + e);
                 }
-            } catch (NullPointerException e){
-                System.out.println("User selected cancel: " + e);
+            }
+        } else {
+            while (!found) { //until item is found,
+                try {
+                    if (Arrays.equals(item, inventory[eqNum])) { //if item name to be removed is same as current item in inv
+                        found = true; //item location is found
+                    } else {
+                        eqNum++;
+                    }
+                } catch (NullPointerException e) {
+                    System.out.println("User selected cancel: " + e);
+                }
             }
         }
-        ArrayList<Object[]> list = new ArrayList<>(Arrays.asList(inventory));
-        list.remove(eqNum);
-        list.add(DEFAULT_EMPTY);
-        inventory = list.toArray(new Object[][]{});
+        inventory[eqNum][1] = (int)inventory[eqNum][1] - (int)item[1];
+        if ((int)inventory[eqNum][1] <= 0) {
+            if ((int)inventory[eqNum][1] < 0){
+                System.out.println("Tried removing more than existed");
+            }
+            ArrayList<Object[]> list = new ArrayList<>(Arrays.asList(inventory));
+            list.remove(eqNum);
+            list.add(DEFAULT_EMPTY);
+            inventory = list.toArray(new Object[][]{});
+        }
     }
 
     public int enemiesKilled(){
@@ -448,5 +540,9 @@ public class Character {
 
     public Object[] getWeapon(){
         return weapon;
+    }
+
+    public int getXp(){
+        return xp;
     }
 }
