@@ -37,7 +37,9 @@ public class Display {
                     map.append(s10 + "Key:");
                     break;
                 case 4:
-                    map.append(s10 + "<span style='font-size:10px'>Player: <span style='font-size:20px'>" + PLAYER);
+                    map.append(s10 + "<span style='font-size:10px'>Player: <span style='font-size:20px'>" + PLAYER +
+                            "<span style='font-size:10px'> (" + Movement.getX() + ", " + Movement.getY() +
+                            ")<span style='font-size:20px'>");
                     break;
                 case 5:
                     map.append(s10 + "<span style='font-size:10px'>City: <span style='font-size:20px'>" + CITY);
@@ -193,8 +195,6 @@ public class Display {
                 } else if (update) {
                     map.setText(getMapString(Movement.getX(), Movement.getY()));
                     dialog.setContentPane(map);
-//                    dialog.add(map, 0);
-//                    dialog.setVisible(true);
                     update = false;
                 }
             }
