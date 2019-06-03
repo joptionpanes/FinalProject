@@ -1,5 +1,7 @@
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 public class Movement {
 
@@ -28,8 +30,10 @@ public class Movement {
     //MOVEMENT MAIN METHOD
     public static void movementMain(){
         //Making The Control Panel for Movement
-        JPanel panel = new JPanel(new GridLayout(2, 1));
-        panel.add(new JLabel("Control Panel:"));
+        JPanel panel = new JPanel(new GridBagLayout());
+        GridBagConstraints c = new GridBagConstraints();
+        c.gridwidth = 3;
+        panel.add(new JLabel("Select an option below and click \"Select\":"), c);
 
         JToggleButton map = new JToggleButton("Map");
         JToggleButton inv = new JToggleButton("Inventory");
@@ -40,32 +44,33 @@ public class Movement {
         movement.add(inv);
         movement.add(exit);
 
-        panel.add(new JLabel("")); //separate
-        panel.add(new JLabel("")); //separate
-        panel.add(inv);
-        panel.add(map);
-        panel.add(exit);
+        c.gridwidth = 1;
+        c.gridy = 1;
+        c.gridx = 0;
+        panel.add(inv, c);
+        c.gridx = 1;
+        panel.add(map, c);
+        c.gridx = 2;
+        panel.add(exit, c);
 
-        String[] options = new String[] {"Move North", "Move South", "Move West", "Move East", "Select Option"};
-        int response = JOptionPane.showOptionDialog(null, panel, "Movement",
-                JOptionPane.DEFAULT_OPTION, JOptionPane.PLAIN_MESSAGE,
-                null, options, options[0]);
+        String[] options = new String[] {"Move North", "Move South", "Move West", "Move East", "Select"};
+        int response = JOptionPane.showOptionDialog(null, panel, "Control Panel", JOptionPane.DEFAULT_OPTION,
+                JOptionPane.PLAIN_MESSAGE, null, options, options[0]);
 
-
-        if (response == 0)
+        if (response == 0) {
             moveNorth();
-        else if(response == 1)
+        } else if(response == 1) {
             moveSouth();
-        else if(response == 2)
+        } else if(response == 2){
             moveEast();
-        else if(response == 3)
+        } else if(response == 3) {
             moveWest();
-        else if(response == 4 && inv.isSelected())
+        } else if(response == 4 && inv.isSelected())
             Start.player.displayInv();
         else if(response == 4 && map.isSelected()){
             int[] x = {getX()};
             int[] y = {getY()};
-            Save.displayMap(x, y);
+            Start.d.displayMap(x, y);
         } else if(response == 4 && exit.isSelected() || response == -1)
             exitAndSave();
 
@@ -78,24 +83,28 @@ public class Movement {
     //MOVEMENT METHODS
     public static void moveNorth(){
         y += 1;
+        Start.d.update = true;
         System.out.println("Moving North to: " + x + ", " + y);
         encounterCheck();
     }
 
     public static void moveWest(){
         x -= 1;
+        Start.d.update = true;
         System.out.println("Moving West to: " + x + ", " + y);
         encounterCheck();
     }
 
     public static void moveEast(){
         x += 1;
+        Start.d.update = true;
         System.out.println("Moving East to: " + x + ", " + y);
         encounterCheck();
     }
 
     public static void moveSouth(){
         y -= 1;
+        Start.d.update = true;
         System.out.println("Moving South to: " + x + ", " + y);
         encounterCheck();
     }

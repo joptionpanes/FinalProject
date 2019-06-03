@@ -1,12 +1,12 @@
 public class Level {
 
 
-    public static void Lvl(){
+    public static void checkLvl(){
         int needed = Start.player.getXpNeeded();
-        if(Character.getXp() >= needed){
-            Character.addLevel();
-            Start.player.setXpNeeded(needed *= 1.5);
-            Character.setXp(0);
+        if(Start.player.getXp() >= needed){
+            Start.player.addLevel();
+            Start.player.setXpNeeded((int)(needed * 1.5));
+            Start.player.setXp(Start.player.getXp() - needed);
             Start.player.addMaxHp(20);
             Start.player.addHp(20);
             Start.player.addCoins(20);
