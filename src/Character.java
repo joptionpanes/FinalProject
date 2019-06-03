@@ -39,6 +39,8 @@ public class Character {
         armorRating = 0;
         xpNeeded = 20;
         level = 0;
+        defense = 0;
+        strength = 0;
         for (int i = 0; i < inventory.length; i++) { //inventory
             inventory[i] = DEFAULT_EMPTY;
         }
@@ -98,10 +100,12 @@ public class Character {
 
     public void addStrength(int s){
         strength += s;
+        attackStrength += strength;
     }
 
     public void addDefense(int d){
         defense += d;
+        armorRating += defense;
     }
 
     public void addCoins(int c){
@@ -141,7 +145,10 @@ public class Character {
         for (int i = 0; i < inventory.length; i++){ //go thru all inventory items
             if (Arrays.equals(item, inventory[i])) {
                 Object[] inventoryItem = {inventory[i][0], (int)inventory[i][1] + number}; //add them together and
+                String display = inventory[i][0] + " [" + inventory[i][1] + "] upgraded by " + number + " to: ";
                 inventory[i] = inventoryItem; //put upgraded item in the slot
+                display += inventory[i][0] + " [" + inventory[i][1] + "]";
+                JOptionPane.showMessageDialog(null, display);
                 return;
             }
         }
@@ -151,14 +158,20 @@ public class Character {
         for (int i = 0; i < armor.length; i++){ //go thru all armor items
             if (Arrays.equals(item, armor[i])) {
                 Object[] inventoryItem = {armor[i][0], (int)armor[i][1] + number}; //add them together and
+                String display = armor[i][0] + " [" + armor[i][1] + "] upgraded by " + number + " to: ";
                 armor[i] = inventoryItem; //put upgraded item in the slot
+                display += armor[i][0] + " [" + armor[i][1] + "]";
+                JOptionPane.showMessageDialog(null, display);
                 return;
             }
         }
     }
 
     public void upgradeWeaponItem(int number){
+        String display = weapon[0] + " [" + weapon[1] + "] upgraded by " + number + " to: ";
         weapon = new Object[]{weapon[0], (int) weapon[1] + number}; //put upgraded item in the slot
+        display += weapon[0] + " [" + weapon[1] + "]";
+        JOptionPane.showMessageDialog(null, display);
     }
 
     public Object[] equip(String name, int value){
@@ -174,9 +187,9 @@ public class Character {
                 System.out.println(getArmorString());
             }
         }
-        armorRating = 0;
+        armorRating = defense;
         for (int a = 0; a < armor.length; a++){
-            armorRating = armorRating + (int)armor[a][1];
+            armorRating += (int)armor[a][1];
             System.out.println(armorRating);
         }
         if (name.contains(weapons[0])||name.contains(weapons[1])||name.contains(weapons[2])){ //checks if it is a weapon
@@ -184,11 +197,11 @@ public class Character {
             Object[] curr = {name, value}; //current
             weapon = curr;
             if (name.contains(weapons[playerClass])){
-                attackStrength = (int)(value * 1.5);
+                attackStrength = ((int)(value * 1.5)) + strength;
                 System.out.println("Equipped weapon base: " + value + "\nWith class bonus: " + attackStrength);
             }
             else {
-                attackStrength = value;
+                attackStrength = value + strength;
             }
             System.out.println(name + " added to weapon slot");
             System.out.println(weapon[0].toString() + " [" + weapon[1].toString() + "]");
@@ -420,6 +433,7 @@ public class Character {
 
     public void addMaxHp(int a){
         maxHp += a;
+        addHp(a);
     }
 
     public void addHp(int a){
