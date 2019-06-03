@@ -30,7 +30,7 @@ public class Enemies {
     private static String[] names = {"Slime","Goblin","Undead","Orc","Giant"};
 
     public void enemyGenerator() {
-        int level = Start.player.getLevel();
+        int level = Start.player.getLevel() / 2;
         if (level > 5){
             level = 5;
         }
@@ -77,11 +77,11 @@ public class Enemies {
             JOptionPane.showMessageDialog(null, "You did " + (attackStrength - armor) + " damage");
 
             if (hitPoints <= 0) {
-                JOptionPane.showMessageDialog(null, name + " has been defeated\nYou got " + goldGiven + " coins and " + xpGiven + " xp");
+                JOptionPane.showMessageDialog(null, name + " has been defeated");
                 Start.player.addCoins(goldGiven);
                 Start.player.addKill(encounter);
                 Start.player.addXp(xpGiven);
-                Level.Lvl();
+                Level.checkLvl();
                 if (name.equals("Dragon")){
                     dragonKilled = true;
                 }

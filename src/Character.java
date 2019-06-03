@@ -60,15 +60,15 @@ public class Character {
         }else
             System.out.println("Error when selecting class. Does not exist!");
     }
-    
+
     public void setXp(int i){
         xp = i;
     }
-    
+
     public void setXpNeeded(int i){
         xpNeeded = i;
     }
-    
+
     /**
      * @param q {enemy type (-1 means no quest), amnt to kill, reward, start amount, city loc x, city loc y}
      */
@@ -89,7 +89,7 @@ public class Character {
     }
 
     public int getXpNeeded() {
-        return xpNeeded; 
+        return xpNeeded;
     }
 
     public int getLevel(){
@@ -111,7 +111,7 @@ public class Character {
 
     public void addXp(int c){
         xp += c;
-        System.out.println(c + " xp added. Total: " + xp);
+        JOptionPane.showMessageDialog(null, c + " xp added. Total: " + xp);
     }
 
     public boolean addInventory(String name, int number){
@@ -135,6 +135,30 @@ public class Character {
             }
         }
         return itemPlaced;
+    }
+
+    public void upgradeInvItem(Object[] item, int number){
+        for (int i = 0; i < inventory.length; i++){ //go thru all inventory items
+            if (Arrays.equals(item, inventory[i])) {
+                Object[] inventoryItem = {inventory[i][0], (int)inventory[i][1] + number}; //add them together and
+                inventory[i] = inventoryItem; //put upgraded item in the slot
+                return;
+            }
+        }
+    }
+
+    public void upgradeArmorItem(Object[] item, int number){
+        for (int i = 0; i < armor.length; i++){ //go thru all armor items
+            if (Arrays.equals(item, armor[i])) {
+                Object[] inventoryItem = {armor[i][0], (int)armor[i][1] + number}; //add them together and
+                armor[i] = inventoryItem; //put upgraded item in the slot
+                return;
+            }
+        }
+    }
+
+    public void upgradeWeaponItem(int number){
+        weapon = new Object[]{weapon[0], (int) weapon[1] + number}; //put upgraded item in the slot
     }
 
     public Object[] equip(String name, int value){
@@ -330,8 +354,8 @@ public class Character {
                 }
                 Object[] prev;
                 prev = equip(equipables.get(eqNum)[0].toString(), (int)equipables.get(eqNum)[1]); //equip selected item
-                Object[] item = {equipables.get(eqNum)[0].toString(), equipables.get(eqNum)[1]};
-                removeFromInv(item);
+                Object[] item = {equipables.get(eqNum)[0], equipables.get(eqNum)[1]};
+                removeFromInv(item, false);
                 addInventory(prev[0].toString(), (int)prev[1]);
                 return true; //return true if item is equipped
             } catch (NullPointerException e){
@@ -354,7 +378,7 @@ public class Character {
                     }
                 }
                 Object[] item = {inventory[eqNum][0].toString(), inventory[eqNum][1]};
-                removeFromInv(item);
+                removeFromInv(item, false);
             } catch (NullPointerException e){
                 System.out.println("Drop cancelled: " + e);
                 return false;
@@ -415,7 +439,8 @@ public class Character {
                 inventory, armor, {weapon},
                 {
                         {Movement.getX(), Movement.getY()}, {playerClass}, {coins}, {hitPoints, maxHp},
-                        {attackStrength, armorRating}, {level}, {killCounters}, {activeQuest}, {defense, strength}
+                        {attackStrength, armorRating}, {xp, level, xpNeeded}, {killCounters}, {activeQuest},
+                        {defense, strength}
                 },
 
         };
@@ -437,7 +462,9 @@ public class Character {
             maxHp = (int) saveValues[3][3][1];
             attackStrength = (int) saveValues[3][4][0];
             armorRating = (int) saveValues[3][4][1];
-            level = (int) saveValues[3][5][0];
+            xp = (int) saveValues[3][5][0];
+            level = (int) saveValues[3][5][1];
+            xp = (int) saveValues[3][5][2];
             killCounters = (int[])saveValues[3][6][0];
             activeQuest = (int[]) saveValues[3][7][0];
             defense = (int) saveValues[3][8][0];
@@ -455,22 +482,39 @@ public class Character {
         System.out.println(c + " coins removed. ");
     }
 
-    public void removeFromInv(Object[] item){
+    public void removeFromInv(Object[] item, boolean any){
         boolean found = false;
         int eqNum = 0;
-        while (!found) { //until item is found,
-            try {
-                if (item[0].equals(inventory[eqNum][0])) { //if item name to be removed is same as current item in inv
-                    found = true; //item location is found
-                } else {
-                    eqNum++;
+        if (any) {
+            while (!found) { //until item is found,
+                try {
+                    if (item[0].equals(inventory[eqNum][0])) { //if item name to be removed is same as current item in inv
+                        found = true; //item location is found
+                    } else {
+                        eqNum++;
+                    }
+                } catch (NullPointerException e) {
+                    System.out.println("User selected cancel: " + e);
                 }
-            } catch (NullPointerException e){
-                System.out.println("User selected cancel: " + e);
+            }
+        } else {
+            while (!found) { //until item is found,
+                try {
+                    if (Arrays.equals(item, inventory[eqNum])) { //if item name to be removed is same as current item in inv
+                        found = true; //item location is found
+                    } else {
+                        eqNum++;
+                    }
+                } catch (NullPointerException e) {
+                    System.out.println("User selected cancel: " + e);
+                }
             }
         }
         inventory[eqNum][1] = (int)inventory[eqNum][1] - (int)item[1];
-        if ((int)inventory[eqNum][1] == 0) {
+        if ((int)inventory[eqNum][1] <= 0) {
+            if ((int)inventory[eqNum][1] < 0){
+                System.out.println("Tried removing more than existed");
+            }
             ArrayList<Object[]> list = new ArrayList<>(Arrays.asList(inventory));
             list.remove(eqNum);
             list.add(DEFAULT_EMPTY);
