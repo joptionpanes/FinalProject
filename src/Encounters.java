@@ -488,6 +488,10 @@ public class Encounters {
     }
 
     public void generateBossBattle(){
+        int cont = JOptionPane.showConfirmDialog(null, "WARNING:\nYou're entering the Dragon's Lair.\nYou may get merked. Continue?");
+        if (cont == 0){
+            return;
+        }
         Enemies dragon = new Enemies();
         dragon.newDragon();
 

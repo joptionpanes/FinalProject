@@ -162,6 +162,11 @@ public class Character {
                 armor[i] = inventoryItem; //put upgraded item in the slot
                 display += armor[i][0] + " [" + armor[i][1] + "]";
                 JOptionPane.showMessageDialog(null, display);
+                armorRating = defense;
+                for (int a = 0; a < armor.length; a++){
+                    armorRating += (int)armor[a][1];
+                    System.out.println(armorRating);
+                }
                 return;
             }
         }

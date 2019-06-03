@@ -44,14 +44,14 @@ public class Enemies {
         name = names[encounter];
     }
 
-    public void newDragon(){
-        maxHitPoints=(int) (Math.random()*((100-80)+1))+80;
+    public void newDragon() {
+        maxHitPoints=(int) (Math.random()*((1000-800)+1))+800;
         hitPoints = maxHitPoints;
         encounter = 6;
-        attack = (int) (Math.random()*((70-60)+1))+60;
-        armor = (int)(Math.random()*((15-10)+1))+10;
-        xpGiven = (int)(Math.random() *((60-50))+1)+50;
-        goldGiven = (int)(Math.random()*((60-50))+1)+50;
+        attack = (int) (Math.random()*((250-200)+1))+200;
+        armor = (int)(Math.random()*((30-20)+1))+20;
+        xpGiven = (int)(Math.random() *((200-100))+1)+100;
+        goldGiven = (int)(Math.random()*((100-50))+1)+50;
         name = "Dragon";
     }
 
@@ -79,11 +79,12 @@ public class Enemies {
             if (hitPoints <= 0) {
                 JOptionPane.showMessageDialog(null, name + " has been defeated");
                 Start.player.addCoins(goldGiven);
-                Start.player.addKill(encounter);
                 Start.player.addXp(xpGiven);
                 Level.checkLvl();
                 if (name.equals("Dragon")){
                     dragonKilled = true;
+                } else {
+                    Start.player.addKill(encounter);
                 }
             }
         }
