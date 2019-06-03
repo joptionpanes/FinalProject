@@ -193,8 +193,6 @@ public class Display {
                 } else if (update) {
                     map.setText(getMapString(Movement.getX(), Movement.getY()));
                     dialog.setContentPane(map);
-//                    dialog.add(map, 0);
-//                    dialog.setVisible(true);
                     update = false;
                 }
             }
