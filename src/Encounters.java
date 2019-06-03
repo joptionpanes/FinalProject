@@ -535,7 +535,7 @@ public class Encounters {
     }
 
     static JSlider getSlider(final JOptionPane optionPane) {
-        JSlider slider = new JSlider(0, Start.player.getStones(), 0);// need call to stones in character made
+        JSlider slider = new JSlider(0, Start.player.getStones(), 0);
         slider.setMajorTickSpacing(10);
         slider.setPaintTicks(true);
         slider.setPaintLabels(true);
@@ -544,7 +544,6 @@ public class Encounters {
             if (!theSlider.getValueIsAdjusting()) {
                 optionPane.setInputValue(theSlider.getValue());
             }
-
         };
         slider.addChangeListener(changeListener);
         return slider;
