@@ -33,6 +33,22 @@ Affects shops and enemy encounter.
 <h3 align = "center"> Enemy </h3>
  
  * Slime, Goblin, Undead, Orc, Giant
+   * Do more damage, have higher defence, (higher stats in general) the further right
+ * Main way to get coins and levels
+ 
+ <h3 align = "center"> City </h3>
+ 
+ * Randomly generated
+ * Chance to spawn with:
+   * Shop
+     * Buy & sell items
+   * Inn
+     * Heal health
+   * Forge
+     * Upgrade tools
+   * Quest
+     * Kill enemies for coins
+     * Only one quest can be accepted at a time
 
 
 ## Flow Chart
