@@ -25,9 +25,10 @@ public class Display {
                         map.append(CITY);
                     } else if (Save.getMapAtPos(centerX + MAP_SIZE - i, centerY + MAP_SIZE - j)[0][0].equals("NULL")) {
                         map.append(NOTHING);
+                    } else if (Save.getMapAtPos(centerX + MAP_SIZE - i, centerY + MAP_SIZE - j)[0][0].equals("BOSS")) {
+                        map.append(NOT_GENNED);
                     }
                 } catch (NullPointerException e) {
-                    //System.out.println("Found nothing while drawing map: " + e);
                     map.append(NOT_GENNED);
                 }
             }

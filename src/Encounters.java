@@ -37,7 +37,7 @@ public class Encounters {
             if (itemDecider < 10){ //choose weapon
                 int type = (int)(Math.random() * 3);
                 int attack = (int)(Math.random() * (15 * shopLvl)) + 5;
-                int cost = (int)(Math.random() * (shopLvl * 10)) + attack;
+                int cost = (int)(Math.random() * ((shopLvl + 2) * 10)) + attack;
                 Object[] temp = {weaponTypes[type], attack, cost};
                 shop[i] = temp;
             } else if (itemDecider < 13){ //catalyst
@@ -234,9 +234,9 @@ public class Encounters {
                                 int claim = JOptionPane.showConfirmDialog(null, "Claim reward? (" + questString + ")", "Quest",
                                         JOptionPane.YES_NO_OPTION);
                                 if (claim == 0) {
-                                    JOptionPane.showMessageDialog(null, "You have claimed the quest reward!\n" +
-                                            "Received " + playerQuest[2] + " coins");
                                     Start.player.addCoins(playerQuest[2]);
+                                    JOptionPane.showMessageDialog(null, "You have claimed the quest reward!\n" +
+                                            "Received " + playerQuest[2] + " coins. Total: " + Start.player.getCoins());
                                     int[] defaultQuest = {-1, 0, 0, 0, 0, 0};
                                     Start.player.setActiveQuest(defaultQuest);
                                 }
@@ -278,7 +278,10 @@ public class Encounters {
                             }
                             Object[][] inventory = Start.player.getInventory();
                             Object[] item = {inventory[eqNum][0].toString(), inventory[eqNum][1]};
-                            Start.player.addCoins((int) (Math.random() * (int) inventory[eqNum][1]) + (int) inventory[eqNum][1]);
+                            int itemValue = (int)inventory[eqNum][1];
+                            int coinAmnt = (int) (Math.random() * (int) inventory[eqNum][1]) + itemValue / 2;
+                            Start.player.addCoins(coinAmnt);
+                            JOptionPane.showMessageDialog(null, coinAmnt + " coins added. Total: " + Start.player.getCoins());
                             Start.player.removeFromInv(item, false);
                         } catch (NullPointerException e) {
                             System.out.println("Sell cancelled: " + e);
@@ -482,33 +485,36 @@ public class Encounters {
             list.remove(eqNum); //remove the bought item
             Start.player.addInventory(shop[eqNum][0].toString(), (int)shop[eqNum][1]);
             Object[][] newShop = list.toArray(new Object[][]{}); //turn back into object array
-            shopDialog(newShop); //new dialog with new shop
+            newShop = shopDialog(newShop); //new dialog with new shop
             return newShop;
         }
     }
 
     public void generateBossBattle(){
-        int cont = JOptionPane.showConfirmDialog(null, "WARNING:\nYou're entering the Dragon's Lair.\nYou may get merked. Continue?");
-        if (cont == 0){
-            return;
-        }
-        Enemies dragon = new Enemies();
-        dragon.newDragon();
+        int cont = JOptionPane.showConfirmDialog(null, "WARNING:\nYou're entering the Dragon's Lair.\nYou may get merked. Continue?",
+                "Boss", JOptionPane.YES_NO_OPTION);
+        if (cont != JOptionPane.YES_OPTION){
+            System.out.println("User Selects they scared");
+        } else {
+            System.out.println("BOSS BATTLE ENSUES!");
+            Enemies dragon = new Enemies();
+            dragon.newDragon();
 
-        while (Start.player.isAlive() && dragon.isAlive()) {
-            String[] battleOptions = {"Attack", "Items"};
-            String message = "Fighting " + dragon.MonName() + ". " + dragon.getStatus() +
-                    "\nPlayer hp: " + Start.player.getHitPoints();
-            int result = JOptionPane.showOptionDialog(null, message, "Choose what to do",
-                    JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE, null, battleOptions, null);
-            boolean itemUsed = true;
-            if (result == 0) {
-                dragon.defend();
-            } else {
-                itemUsed = Start.player.displayInv();
-            }
-            if (dragon.isAlive() && itemUsed) {
-                Start.player.defend(dragon);
+            while (Start.player.isAlive() && dragon.isAlive()) {
+                String[] battleOptions = {"Attack", "Items"};
+                String message = "Fighting " + dragon.MonName() + ". " + dragon.getStatus() +
+                        "\nPlayer hp: " + Start.player.getHitPoints();
+                int result = JOptionPane.showOptionDialog(null, message, "Choose what to do",
+                        JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE, null, battleOptions, null);
+                boolean itemUsed = true;
+                if (result == 0) {
+                    dragon.defend();
+                } else {
+                    itemUsed = Start.player.displayInv();
+                }
+                if (dragon.isAlive() && itemUsed) {
+                    Start.player.defend(dragon);
+                }
             }
         }
     }
