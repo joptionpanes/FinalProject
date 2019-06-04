@@ -55,6 +55,16 @@ public class Start {
                 System.exit(2);
             }
         }
+        if (player.getHitPoints() <= 0){
+            if (JOptionPane.showConfirmDialog(null, "Yo, you died. That's irreversible!", "Death is permanent!",
+                    JOptionPane.OK_CANCEL_OPTION) == JOptionPane.CANCEL_OPTION) {
+                JOptionPane.showMessageDialog(null, "I see. You don't give up. I'll give you another chance...",
+                        "ORLLY", JOptionPane.PLAIN_MESSAGE);
+                player.addHp(player.getMaxHp());
+            } else {
+                System.exit(10);
+            }
+        }
         while (true) {
             Movement.movementMain();
         }

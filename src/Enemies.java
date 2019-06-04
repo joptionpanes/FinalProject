@@ -31,8 +31,8 @@ public class Enemies {
 
     public void enemyGenerator() {
         int level = Start.player.getLevel() / 2;
-        if (level > 5){
-            level = 5;
+        if (level > 4){
+            level = 4;
         }
         encounter = (int) (Math.random() * ((level) + 1));
         maxHitPoints = maxHitPointsArray[encounter];
@@ -48,10 +48,10 @@ public class Enemies {
         maxHitPoints=(int) (Math.random()*((1000-800)+1))+800;
         hitPoints = maxHitPoints;
         encounter = 6;
-        attack = (int) (Math.random()*((250-200)+1))+200;
+        attack = (int) (Math.random()*((150-100)+1))+100;
         armor = (int)(Math.random()*((30-20)+1))+20;
         xpGiven = (int)(Math.random() *((200-100))+1)+100;
-        goldGiven = (int)(Math.random()*((100-50))+1)+50;
+        goldGiven = (int)(Math.random()*((200-50))+1)+100;
         name = "Dragon";
     }
 
@@ -77,9 +77,10 @@ public class Enemies {
             JOptionPane.showMessageDialog(null, "You did " + (attackStrength - armor) + " damage");
 
             if (hitPoints <= 0) {
-                JOptionPane.showMessageDialog(null, name + " has been defeated");
                 Start.player.addCoins(goldGiven);
                 Start.player.addXp(xpGiven);
+                JOptionPane.showMessageDialog(null, name + " has been defeated\n" + goldGiven + " coins added. Total: " +
+                        Start.player.getCoins() + "\n"+ xpGiven + " xp added. Total: " + Start.player.getXp());
                 Level.checkLvl();
                 if (name.equals("Dragon")){
                     dragonKilled = true;
