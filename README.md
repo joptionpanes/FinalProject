@@ -13,18 +13,21 @@ Journeyman's Quest is a text-based RPG made in Java. It has the following featur
 * And more!
 ## Character
 <h3 align = "center"> Inventory </h3>
-<ul><li>20 slots</li>
- <ul><li>Armor and weapons are not stackable</li>
-  <li>Normal items do (Catalysts and rocks, currently)</li></ul>
- <li>4 slots for armor and 1 for equipped weapon</li>
- <li>GUI to show items and equipment</li>
+
+* 20 slots
+  * Armor and weapons are not stackable
+  * Normal items do (Catalysts and rocks, currently)
+* 4 slots for armor and 1 for equipped weapon
+* GUI to show items and equipment
 <h3 align = "center"> XP and Levels </h3>
+
 Affects shops and enemy encounter.
 <h3 align = "center"> Class </h3>
- <ul><li>Classes do 1.5x more damage with their weapons</li>
-  <ul><li>Swordsman does more damage w/ sword</li>
-   <li>Archer with Bows</li>
-   <li>Mage with Wands</li></ul></ul>
+
+* Classes do 1.5x more damage with their weapons
+  * Swordsman does more damage w/ sword
+  * Archer with Bows
+  * Mage with Wands
  
  ## Encounters
 <h3 align = "center"> Enemy </h3>
