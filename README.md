@@ -17,18 +17,20 @@ This game has the following features:
 
 * 20 slots
   * Armor and weapons are not stackable
-  * Normal items do (Catalysts and rocks, currently)
+  * Normal items are (Catalysts and rocks, currently)
 * 4 slots for armor and 1 for equipped weapon
 * GUI to show items and equipment
 <h3 align = "center"> XP and Levels </h3>
 
 Affects shops and enemy encounter.
+
 <h3 align = "center"> Class </h3>
 
 * Classes do 1.5x more damage with their weapons
-  * Swordsman does more damage w/ sword
-  * Archer with Bows
-  * Mage with Wands
+  * Swordsman => sword
+  * Archer => Bows
+  * Mage => Wands
+Who'd've thunk it?
  
  ## Encounters
 <h3 align = "center"> Enemy </h3>
@@ -62,11 +64,13 @@ Affects shops and enemy encounter.
 * Once you leave, you cannot go back, he wanders away. (It is not saved on the map)
 * Rarest encounter
 
- <h3 align = "center"> Rocks </h3>
+<h3 align = "center"> Rocks </h3>
  
- Sometimes you're wandering around and a litte glimmer catches your eye. You find some rocks that look to be of some value. These can be used in the forge to upgrade your items
+Sometimes you're wandering around and a litte glimmer catches your eye. You find some rocks that look to be of some value. These can be used in the forge to upgrade your items
  
 ## Map
+
+The map is stored in the save folder, and is randomly generated as you walk around. The Boss areas are generated in advance, in one location that per multiple of 100 (x/y), 10 spaces radius
 
 ## Flow Chart
  <img src="./images/Final Flow Chart.png" alt="Project Flow Chart" width="800">
