@@ -72,6 +72,8 @@ Sometimes you're wandering around and a litte glimmer catches your eye. You find
 
 The map is stored in the save folder, and is randomly generated as you walk around. The Boss areas are generated in advance, in one location that per multiple of 100 (x/y), 10 spaces radius
 
+<img src="./images/Grid.png" alt="Grid example" width="800">
+
 ## Flow Chart
  <img src="./images/Final Flow Chart.png" alt="Project Flow Chart" width="800">
 
