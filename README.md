@@ -24,10 +24,12 @@ Affects shops and enemy encounter.
  <ul><li>Classes do 1.5x more damage with their weapons</li>
   <ul><li>Swordsman does more damage w/ sword</li>
    <li>Archer with Bows</li>
-   <li>Mage with Wands</li>
-## Encounters
+   <li>Mage with Wands</li></ul></ul>
+ 
+ ## Encounters
 <h3 align = "center"> Enemy </h3>
-   <ul><li>Slime, Goblin, Undead, Orc, Giant</li>
+ 
+ * Slime, Goblin, Undead, Orc, Giant
 
 
 ## Flow Chart
