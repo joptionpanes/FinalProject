@@ -1,5 +1,6 @@
 # Journeyman's Quest
-Journeyman's Quest is a text-based RPG made in Java. It has the following features:
+Journeyman's Quest is a text-based RPG made in Java. In it, you walk aimlessly, encountering enemies and cities in your path. You build up your gear, as you feel a presence that is lurking underneath. Still aimlessly walking, but with intent, you've found this dark, otherworldly presence. It is a cute little bunny rabbit, *not*. <br/>
+This game has the following features:
 
 * Fully fleged character
   * Levels and xp
@@ -65,7 +66,7 @@ Affects shops and enemy encounter.
  
  Sometimes you're wandering around and a litte glimmer catches your eye. You find some rocks that look to be of some value. These can be used in the forge to upgrade your items
  
-## Something
+## Map
 
 ## Flow Chart
  <img src="./images/Final Flow Chart.png" alt="Project Flow Chart" width="800">
