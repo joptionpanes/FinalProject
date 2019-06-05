@@ -79,5 +79,5 @@ The below image is a representation of the boss spawning. Red is any coordinate 
  <img src="./images/Final Flow Chart.png" alt="Project Flow Chart" height="400" width="400">
 
 ## Video
-<iframe frameborder="0" scrolling="no" marginheight="0" marginwidth="0"width="788.54" height="443" type="text/html" src="https://www.youtube.com/embed/fryWuiGTE58?autoplay=0&fs=1&iv_load_policy=3&showinfo=0&rel=0&cc_load_policy=0&start=0&end=0&origin=https://youtubeembedcode.com"><div><small><a href="https://youtubeembedcode.com/en">youtubeembedcode en</a></small></div><div><small><a href="http://add-link-exchange.com">ww://add-link-exchange.com</a></small></div><div><small><a href="https://youtubeembedcode.com/pl/">youtubeembedcode.com/pl/</a></small></div><div><small><a href="http://add-link-exchange.com">ww://add-link-exchange.com</a></small></div></iframe>
-<a href="https://youtu.be/fryWuiGTE58">Link here</a>
+[![Click for video](http://img.youtube.com/vi/fryWuiGTE58/0.jpg)](http://www.youtube.com/watch?v=fryWuiGTE58 "Video Title")
+Click image or: <a href="https://youtu.be/fryWuiGTE58">Link here</a>
