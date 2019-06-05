@@ -75,8 +75,23 @@ The below image is a representation of the boss spawning. Red is any coordinate 
 
 <img src="./images/Grid.png" alt="Grid example" width="192" image-rendering="pixelated">
 
+## Saving and Loading
+
+<h3 align = "center"> Saving </h3>
+
+* Start a new game
+* Saves after every move
+* Saves when closed or when user selects "Exit and Save" (duh)
+* Player details and the map are saved (Cities included with the map)
+
+<h3 align = "center"> Loading </h3>
+
+* Does what you expect
+* Loads the information like character data and map data
+* 's pretty neat
+
 ## Flow Chart
- <img src="./images/Final Flow Chart.png" alt="Project Flow Chart" height="400" width="400">
+ <img src="./images/Final Flow Chart.png" alt="Project Flow Chart" width="800">
 
 ## Video
 [![Click for video](http://img.youtube.com/vi/fryWuiGTE58/0.jpg)](http://www.youtube.com/watch?v=fryWuiGTE58 "Video Title")
