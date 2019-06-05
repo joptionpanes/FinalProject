@@ -49,23 +49,29 @@ Who'd've thunk it?
  <img src="./images/IMGS/Battle.PNG" alt="Battle GUI">
  
 <h3 align = "center"> City </h3>
+
+
+<img src="./images/IMGS/FullCity.PNG" alt="City GUI">
  
 * Randomly generated
 * Chance to spawn with:
   * Shop
     * Buy & sell items
     * Randomly generated items
+    * <img src="./images/IMGS/CityShop.PNG" alt="City shop GUI"><img src="./images/IMGS/CitySell.PNG" alt="City shop sell GUI">
   * Inn
     * Heal health
+    * <img src="./images/IMGS/CityInn.PNG" alt="City inn GUI"><img src="./images/IMGS/InnNothingToHeal.PNG" alt="City inn can't heal GUI">
   * Forge
     * Upgrade tools with rocks and coins
+    * <img src="./images/IMGS/CityForge.PNG" alt="City forge GUI"><img src="./images/IMGS/CityForgeComplete.PNG" alt="City forge upgraded GUI">
   * Quest
     * Kill enemies for coins
     * Only one quest can be accepted at a time
+    * <img src="./images/IMGS/CityQuest.PNG" alt="City quest GUI"><img src="./images/IMGS/CityQuestAccept.PNG" alt="City quest accept GUI">
 * Saved on the map, so you can go back and buy an item that was previously too expensive for you, or access the quest/forge/inn that existed there!
 * Second most common encounter
 
-<img src="./images/IMGS/FullCity.PNG" alt="City GUI">
  
 <h3 align = "center"> Wandering Trader </h3>
   
