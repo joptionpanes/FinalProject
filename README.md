@@ -20,10 +20,12 @@ This game has the following features:
   * Normal items are (Catalysts and rocks, currently)
 * 4 slots for armor and 1 for equipped weapon
 * GUI to show items and equipment
-<img src="./images/IMGS/Inv.PNG" alt="Inv GUI">
+<img src="./images/IMGS/Inv.PNG" alt="Inventory GUI">
 <h3 align = "center"> XP and Levels </h3>
 
-Affects shops and enemy encounter.
+Affects shops and enemy encounter. The image below it the statistics GUI:
+
+<img src="./images/IMGS/InvStats.PNG" alt="Inventory statistics GUI">
 
 <h3 align = "center"> Class </h3>
 
@@ -33,6 +35,7 @@ Affects shops and enemy encounter.
   * Mage => Wands
   
 Who'd've thunk it?
+
 <img src="./images/IMGS/ClassSelection.PNG" alt="Class Selection GUI">
  
  ## Encounters
