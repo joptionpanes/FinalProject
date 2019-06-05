@@ -23,7 +23,7 @@ This game has the following features:
 <img src="./images/IMGS/Inv.PNG" alt="Inventory GUI">
 <h3 align = "center"> XP and Levels </h3>
 
-Affects shops and enemy encounter. The image below it the statistics GUI:
+Affects shops and enemy encounter. The image below is the statistics GUI:
 
 <img src="./images/IMGS/InvStats.PNG" alt="Inventory statistics GUI">
 
