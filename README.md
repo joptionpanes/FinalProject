@@ -31,7 +31,9 @@ Affects shops and enemy encounter.
   * Swordsman => sword
   * Archer => Bows
   * Mage => Wands
+  
 Who'd've thunk it?
+<img src="./images/IMGS/ClassSelection.PNG" alt="Class Selection GUI">
  
  ## Encounters
 <h3 align = "center"> Enemy </h3>
@@ -40,6 +42,8 @@ Who'd've thunk it?
    * Do more damage, have higher defence, (higher stats in general) the further right
  * Main way to get coins and levels
  * Most common encounter
+ 
+ <img src="./images/IMGS/Battle.PNG" alt="Battle GUI">
  
 <h3 align = "center"> City </h3>
  
@@ -57,6 +61,8 @@ Who'd've thunk it?
     * Only one quest can be accepted at a time
 * Saved on the map, so you can go back and buy an item that was previously too expensive for you, or access the quest/forge/inn that existed there!
 * Second most common encounter
+
+<img src="./images/IMGS/FullCity.PNG" alt="City GUI">
  
 <h3 align = "center"> Wandering Trader </h3>
   
@@ -65,18 +71,27 @@ Who'd've thunk it?
 * Once you leave, you cannot go back, he wanders away. (It is not saved on the map)
 * Rarest encounter
 
+<img src="./images/IMGS/Wanderer.PNG" alt="Wandering Trader GUI">
+
 <h3 align = "center"> Rocks </h3>
  
 Sometimes you're wandering around and a litte glimmer catches your eye. You find some rocks that look to be of some value. These can be used in the forge to upgrade your items
+
+<img src="./images/IMGS/Shiny.PNG" alt="Rock found GUI">
  
 ## Map
 
 The map is stored in the save folder, and is randomly generated as you walk around. The Boss areas are generated in advance, in one location that per multiple of 100 (x/y) up to 1000, 10 spaces radius.<br/>
-The below image is a representation of the boss spawning. Red is any coordinate at a mutiple of 100, up to 1000. Boss will spawn anywhere inside the black box.
+The below image is a representation of the boss spawning. Red is any coordinate at a mutiple of 100, up to 1000. Boss will spawn anywhere inside the black box.<br/>
+The map can be shown at all times if the user chooses. (Persistant map)
 
 <img src="./images/Grid.png" alt="Grid example" width="192" image-rendering="pixelated">
+<img src="./images/IMGS/MapMain.PNG" alt="Main map GUI">
+<img src="./images/IMGS/MapSecondary.PNG" alt="Persistant map GUI">
 
 ## Saving and Loading
+
+<img src="./images/IMGS/Start.PNG" alt="Start GUI">
 
 <h3 align = "center"> Saving </h3>
 
@@ -85,11 +100,15 @@ The below image is a representation of the boss spawning. Red is any coordinate 
 * Saves when closed or when user selects "Exit and Save" (duh)
 * Player details and the map are saved (Cities included with the map)
 
+<img src="./images/IMGS/StartNew.PNG" alt="New save GUI">
+
 <h3 align = "center"> Loading </h3>
 
 * Does what you expect
 * Loads the information like character data and map data
 * 's pretty neat
+
+<img src="./images/IMGS/Load.PNG" alt="Load save file GUI">
 
 ## Flow Chart
  <img src="./images/Final Flow Chart.png" alt="Project Flow Chart" width="800">
