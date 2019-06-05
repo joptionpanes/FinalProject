@@ -20,6 +20,7 @@ This game has the following features:
   * Normal items are (Catalysts and rocks, currently)
 * 4 slots for armor and 1 for equipped weapon
 * GUI to show items and equipment
+<img src="./images/IMGS/Inv.PNG" alt="Inv GUI">
 <h3 align = "center"> XP and Levels </h3>
 
 Affects shops and enemy encounter.
