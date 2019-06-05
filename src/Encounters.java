@@ -118,7 +118,7 @@ public class Encounters {
         int choice;
         do {
             String[] options1 = {"Shop", "Inventory", "Continue"};
-            choice = JOptionPane.showOptionDialog(null, "You've met a wandering traveler!", "Traveler",
+            choice = JOptionPane.showOptionDialog(null, "You've met a wandering trader!", "Trader",
                     JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE, null, options1, null);
             if (choice == 0) {
                 shop = shopDialog(shop);
