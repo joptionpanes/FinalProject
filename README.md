@@ -70,11 +70,14 @@ Sometimes you're wandering around and a litte glimmer catches your eye. You find
  
 ## Map
 
-The map is stored in the save folder, and is randomly generated as you walk around. The Boss areas are generated in advance, in one location that per multiple of 100 (x/y), 10 spaces radius
+The map is stored in the save folder, and is randomly generated as you walk around. The Boss areas are generated in advance, in one location that per multiple of 100 (x/y) up to 1000, 10 spaces radius.<br/>
+The below image is a representation of the boss spawning. Red is any coordinate at a mutiple of 100, up to 1000. Boss will spawn anywhere inside the black box.
 
 <img src="./images/Grid.png" alt="Grid example" width="192" image-rendering="pixelated">
 
 ## Flow Chart
- <img src="./images/Final Flow Chart.png" alt="Project Flow Chart" width="800">
+ <img src="./images/Final Flow Chart.png" alt="Project Flow Chart" height="400" width="400">
 
 ## Video
+<iframe width="806" height="504" src="https://www.youtube.com/embed/fryWuiGTE58" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+<a href="https://youtu.be/fryWuiGTE58">Link here</a>
