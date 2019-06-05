@@ -80,4 +80,4 @@ The below image is a representation of the boss spawning. Red is any coordinate 
 
 ## Video
 [![Click for video](http://img.youtube.com/vi/fryWuiGTE58/0.jpg)](http://www.youtube.com/watch?v=fryWuiGTE58 "Video Title")
-Click image or: <a href="https://youtu.be/fryWuiGTE58">Link here</a>
+<br/>Click image or: <a href="https://youtu.be/fryWuiGTE58">here</a>
