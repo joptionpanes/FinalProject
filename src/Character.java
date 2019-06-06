@@ -580,7 +580,7 @@ public class Character {
 
     public void addKill(int e){
         killCounters[e] += 1;
-        if (activeQuest[1] - (killCounters[e] - activeQuest[3]) <= 0 && !questNotified && activeQuest[0] != -1){
+        if (e == activeQuest[0] && activeQuest[1] - (killCounters[e] - activeQuest[3]) <= 0 && !questNotified){
             JOptionPane.showMessageDialog(null, "Quest complete! Head back to the city to claim the rewards!");
             questNotified = true;
         }
